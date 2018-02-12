@@ -1,0 +1,116 @@
+<meta name="updatedBy" content="GihanHerath">
+<meta name="modifiedDate" content="30-11-2016">
+<meta name="version" content="6.0.0.1">
+<meta name="app" content="inventory">
+<meta name="view" content="compose-dialog-addproduct.html">
+
+<md-dialog class="compose-dialog" aria-label="New Message">
+  <form class="md-inline-form" name="vm.editForm" ng-submit="saveProduct()" novalidate>
+    <md-toolbar class="md-accent md-hue-2">
+      <div class="md-toolbar-tools" layout="row" layout-align="space-between center">
+        <div layout="row" layout-align="start center">
+          <md-icon md-font-icon="icon-package-up"></md-icon> <h3>New Product Details</h3>
+        </div>
+        <md-button class="md-icon-button" ng-click="vm.closeDialog()" aria-label="Close dialog">
+          <md-icon md-font-icon="icon-close"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content ms-scroll>
+      <div class="fill-wrapper">
+        <div class="content-block-wrapper">
+          <div layout="row" class="content-block sample-row">
+            <md-input-container class="bottom" flex>
+              <label>Product Name</label>
+              <input ng-required="true" type="" name="productName" ng-pattern="" minlength="3" ng-maxlength="20" ng-model="content.product_name">
+              <div ng-messages="vm.editForm.productName.$error">
+                <div ng-message="maxlength">Product name must be between 3-20 characters</div>
+                <div ng-message="minlength">Product name must be between 3-20 characters</div>
+              </div>
+            </md-input-container>
+
+            <div flex="5">
+              <!--Spacer -->
+            </div>
+
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Code</label>
+              <input ng-required="true" type="" name="productCode" ng-maxlength="10" ng-blur="validateProduct(content.code)" ng-pattern="" ng-model="content.code">
+              <div ng-messages="vm.editForm.productCode.$error">
+                <div ng-message="required">Product Code is required.</div>
+                <div ng-message="maxlength">Product Code has to be less than 10 characters long</div>
+              </div>
+            </md-input-container>
+          </div>
+
+
+
+          <div layout="row" class="content-block">
+            <md-input-container class="md-block" flex-gt-sm>
+              <label>Price</label>
+              <input ng-required="true" minlength="null" md-maxlength="null" min="0" step="0.01"  type="number" name="Price" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"  ng-model="content.price_of_unit">
+              <div ng-messages="editForm.Price.$error">
+              </div>
+            </md-input-container>
+            <div hide-xs hide-sm flex-gt-sm="5">
+            </div>
+            <md-input-container class="md-block" flex-gt-sm>
+
+            </md-input-container>
+          </div>
+
+
+
+          <div layout="row" class="content-block">
+            <md-checkbox ng-model="content.apply_tax" aria-label="APPLY TAX" class="md-primary p-t-0 m-b-40" flex-gt-sm style="margin-bottom: 30px">
+              Apply Tax
+            </md-checkbox>
+
+            <div flex="5">
+              <!--Spacer -->
+            </div>
+
+            <md-input-container ng-show="content.apply_tax == true" class="md-block m-t-0 h-30 m-b-10" flex-gt-sm style="margin-top: -8px">
+              <label>Tax</label>
+              <md-select ng-required="content.apply_tax" ng-model="content.tax">
+                <md-option ng-repeat="value in taxGroup" value="{{value.taxgroupcode}}">
+                  {{value.taxgroupcode}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+
+
+
+        </div>
+
+      </div>
+
+      <!--<div ng-init="submitted=false" layout="row" layout-align="space-between center" class="md-whiteframe-8dp bottom-fixed-bar">-->
+        <!--<div layout="row"></div>-->
+
+        <!--<div layout="row" class="layout-row">-->
+          <!--<md-button ng-click="clearFields()">Clear</md-button>-->
+          <!--<md-button ng-disabled="productSubmit" type="submit" class="md-raised md-warn">Submit</md-button>-->
+        <!--</div>-->
+      <!--</div>-->
+
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row" layout-align="space-between center">
+      <div layout="row" layout-align="start center">
+        <md-button type="submit" ng-disabled="productSubmit" class="send-button md-accent md-raised" aria-label="Create Product">
+          Create
+        </md-button>
+      </div>
+
+      <div layout="row">
+        <md-button class="md-icon-button" ng-click="clearFields()" aria-label="Delete">
+          <md-icon md-font-icon="icon-delete"></md-icon>
+          <md-tooltip>Clear Product</md-tooltip>
+        </md-button>
+      </div>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

@@ -1,0 +1,420 @@
+<div id="inventory" class="page-layout carded left-sidenav" layout="row" ng-switch="vm.appInnerState">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg md-accent-bg"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- SIDENAV -->
+    <!--<md-sidenav class="sidenav" md-is-locked-open="$mdMedia('gt-md')" md-component-id="main-sidenav"-->
+    <!--ng-include="'app/main/inventory/sidenavs/main/main-sidenav.html'" ms-scroll ms-sidenav-helper>-->
+    <!--</md-sidenav>-->
+    <!-- / SIDENAV -->
+
+    <!-- CENTER -->
+    <div ng-switch-when="default" class="center" layout="column" flex>
+        <!-- CONTENT HEADER- V NAV-->
+        <div layout="column" layout-align="start start">
+            <div class="v-header" layout="column" flex fill-width>
+                <div class="title" layout="column" layout-align="center start" ng-if="!themeDuoworld">
+                    <div class="logo" layout="row" layout-align="start center">
+                        <span class="logo-icon">
+                          <img src="app/core/app_icons/inventory_app_icon.png" alt=""/>
+                        </span>
+                        <span class="logo-text">Inventory</span>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div class="title" layout="column" layout-align="center start" ng-if="themeDuoworld">
+                        <div class="logo" layout="row" layout-align="start center">
+                        <span class="logo-icon">
+                          <img src="app/core/app_icons/inventory_app_icon_black.png" alt=""/>
+                        </span>
+                            <span class="logo-text">Inventory</span>
+                        </div>
+                    </div>
+                    <div class="search-wrapper md-whiteframe-4dp" layout="row" layout-align="start center" flex ng-class="{'op-5':vm.activeInvoicePaneIndex == 1}">
+                        <md-button class="md-icon-button sidenav-toggle" ng-click="vm.toggleSidenav('main-sidenav')" hide-gt-md aria-label="Toggle Sidenav">
+                            <md-icon class="icon" md-font-icon="icon-menu"></md-icon>
+                        </md-button>
+
+                        <div class="search" flex layout="row" layout-align="start center">
+                            <md-icon md-font-icon="icon-magnify" class="icon s24"></md-icon>
+                            <input ng-disabled="vm.activeInvoicePaneIndex == 1" flex ng-model="vm.search" type="text" ng-keypress="searchKeyPress($event,vm.search,vm.search.length)" ng-change="loadByKeywordInventory(vm.search,3)" placeholder="Search for Plans">
+                        </div>
+                    </div>
+                    <md-button class="md-raised md-accent main-app-create" layout="row" layout-align="center center" aria-label="compose" ng-disabled="vm.activeInvoicePaneIndex == 1" ng-click="vm.addInvoice()" ng-if="!inpageReadPaneEdit"><span class="fs-18 mr-10">+</span> NEW
+                    </md-button>
+                </div>
+            </div>
+            <!--<div class="v-nav">-->
+            <!--<div ng-include="'app/main/plans/sidenavs/main/main-sidenav.html'"></div>-->
+            <!--</div>-->
+
+        </div>
+        <!-- CONTENT HEADER- V NAV-->
+
+        <!-- CONTENT HEADER -->
+        <!--<div class="header" layout="row" layout-align="start center" ng-if="vm.activeInvoicePaneIndex === 0">-->
+
+            <!--<div class="search-wrapper md-whiteframe-4dp" layout="row" layout-align="start center" flex>-->
+                <!--<md-button class="md-icon-button sidenav-toggle" ng-click="vm.toggleSidenav('main-sidenav')" hide-gt-md-->
+                           <!--aria-label="Toggle Sidenav">-->
+                    <!--<md-icon class="icon" md-font-icon="icon-menu"></md-icon>-->
+                <!--</md-button>-->
+
+                <!--<div class="search" flex layout="row" layout-align="start center">-->
+                    <!--<md-icon md-font-icon="icon-magnify" class="icon s24"></md-icon>-->
+                    <!--<input flex ng-model="vm.search" ng-change="loadByKeywordInventory(vm.search,3)" type="text" placeholder="Search for inventory">-->
+                <!--</div>-->
+            <!--</div>-->
+
+        <!--</div>-->
+        <!-- / CONTENT HEADER -->
+
+        <!-- CONTENT CARD -->
+        <div layout="row" flex>
+            <div class="content-card" layout="column" ng-class="{'flex-30':showInpageReadpane == true,'flex': showInpageReadpane == false}">
+
+                <div class="toolbar list-header" layout="row" layout-align="space-between center" ng-if="vm.activeInvoicePaneIndex === 0">
+                    <div ng-include="'app/main/inventory/views/list/list-header.html'" layout="row" flex layout-align="start center"></div>
+                </div>
+                <div class="toolbar" layout="row" layout-align="end center" ng-if="vm.activeInvoicePaneIndex === 1">
+                    <md-button class="md-icon-button" style="margin-right: -10px"
+                               ng-click="vm.closeReadPane()"
+                               aria-label="Back">
+                        <md-icon md-font-icon="icon-close"></md-icon>
+                    </md-button>
+                </div>
+
+                <!-- CONTENT WRAPPER -->
+                <div class="content-wrapper" layout="row" flex>
+
+                    <md-tabs md-selected="vm.activeInvoicePaneIndex" class="content-tabs" md-dynamic-height="{{vm.dynamicHeight}}" flex>
+                        <!-- INVOICE LIST PANE -->
+                        <md-tab>
+                            <md-tab-label>Inventory List Pane</md-tab-label>
+                            <md-tab-body>
+                                <div class="preloader" layout="row" layout-sm="column" layout-align="space-around" ng-hide="listLoaded">
+                                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                                </div>
+                                <div class="content main-list-pane"
+                                     ng-include="'app/main/inventory/views/list/list-view.html'" ms-scroll>
+                                </div>
+                            </md-tab-body>
+                        </md-tab>
+                        <!-- / INVOICE LIST PANE -->
+
+                        <!-- INVOICE DISPLAY PANE -->
+                        <md-tab>
+                            <md-tab-label>Inventory Display Pane</md-tab-label>
+                            <md-tab-body>
+                                <div class="content invoice-display-pane mb-50"
+                                     ng-include="'app/main/inventory/views/read/read-view.html'" ms-scroll>
+                                </div>
+                                <div md-whiteframe="8dp" ng-if="inventory_type == 'Receipt'" layout="row" layout-align="space-between center" class="bottom-fixed-bar fixed">
+                                    <div layout="row"></div>
+                                    <md-progress-circular class="gen-save-indicator" ng-if="submitted"></md-progress-circular>
+                                    <div layout="row" class="layout-row">
+                                        <md-button ng-click="clearform('form1');">Clear</md-button>
+                                        <md-button ng-disabled="submitted" type="submit" form="editForm" class="md-raised md-accent">Submit</md-button>
+                                    </div>
+                                </div>
+                                <div md-whiteframe="8dp" ng-if="inventory_type == 'Issue'" layout="row" layout-align="space-between center" class="bottom-fixed-bar fixed">
+                                    <div layout="row"></div>
+                                    <md-progress-circular class="gen-save-indicator" ng-if="submitted"></md-progress-circular>
+                                    <div layout="row" class="layout-row">
+                                        <md-button ng-click="clearform('form2');">Clear</md-button>
+                                        <md-button ng-disabled="submitted" type="submit" form="editForm2" class="md-raised md-accent">Submit</md-button>
+                                    </div>
+                                </div>
+                            </md-tab-body>
+                        </md-tab>
+                        <!-- / INVOICE DISPLAY PANE -->
+                    </md-tabs>
+
+                </div>
+                <!-- / CONTENT WRAPPER -->
+
+            </div>
+            <div flex class="inpage-readpane" layout="column" md-whiteframe="4dp" ng-if="showInpageReadpane">
+                <div layout="row" layout-align="space-between center" class="inpage-readpane-toolbar">
+                    <h3 class="group-sub-head" layout="row" layout-align="start center">Plan Info</h3>
+                    <div layout="row">
+                        <md-menu>
+                            <md-button aria-label="More" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                                <md-icon md-font-icon="icon-menu"></md-icon>
+                                <md-tooltip>Inventory Action</md-tooltip>
+                            </md-button>
+
+                            <md-menu-content width="3">
+                                <md-menu-item>
+                                    <md-button aria-label="Delete" ng-disabled="vm.selectedInventory.status=='Cancelled'" ng-click="cancelorder(vm.selectedInventory);">
+                                        <md-icon md-font-icon="icon-format-clear"></md-icon>
+                                        <span>Cancel GRN/AOD</span>
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                        <md-button class="md-icon-button" ng-click="switchInfoPane('close',vm.selectedInventory)">
+                            <md-icon md-font-icon="icon-close"></md-icon>
+                            <md-tooltip>Close</md-tooltip>
+                        </md-button>
+                    </div>
+                </div>
+
+                <md-content flex ms-scroll layout="column" class="inpage-readpane-body" ng-if="!inpageReadPaneEdit">
+                    <div class="preloader animate-fade-in-out" ng-if="readLoading" style="top: 0;left: 0">
+                        <md-progress-circular></md-progress-circular>
+                    </div>
+                    <div style="width: 700px;min-height: 842px;position:relative;font-size: 14px;overflow: hidden;margin: 0 auto;" md-whiteframe="2dp">
+                        <div class="template-header" style="height: 100px;background: #05a3ec;background:linear-gradient(45deg, #05a3ec,#006696);color: #fff;padding: 10px;">
+                            <div class="left-content" style="width: 30%;float: left;">
+                                <div style="font-size: 30px;margin: 20px 0;">{{vm.selectedInventory.inventory_type.toUpperCase()}}</div>
+                            </div>
+                            <div class="right-content" style="width: 70%;float: right;">
+                                <div class="inner-left" style="width: 50%;float: left;">
+                                    <div style="margin: 5px 0;">{{companyPhone}}</div>
+                                    <div style="margin: 5px 0;">{{companyEmail}}</div>
+                                </div>
+                                <div class="inner-right" style="width: 50%;float: right">
+                                    <div><h3>{{companyName}}</h3></div>
+                                    <div>{{companyAddress}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sub-header" style="padding: 10px;padding-top: 30px;overflow: hidden;">
+                            <div class="left-content" style="width: 55%;float: left;">
+                                <!--<div style="color: #aaa;margin-bottom: 5px">Billed to</div>-->
+                                <div style="margin-bottom: 5px"><b>{{vm.selectedInventory.UserName.toUpperCase()}}</b></div>
+                                <div style="margin-bottom: 5px"><b>{{vm.selectedInventory.UserAddress}}</b></div>
+                                <div style="margin-bottom: 5px"><b>{{vm.selectedInventory.UserContact}}</b></div>
+                                <div><b>{{vm.selectedInventory.UserEmail}}</b></div>
+
+                                <div class="inner-left" style="margin-bottom: 10px;margin-top: 20px;">
+                                    <div style="color: #aaa;margin-bottom: 2px">Inventory type</div>
+                                    <div><b>{{vm.selectedInventory.inventory_type}}</b></div>
+                                </div>
+                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">
+                                    <div style="color: #aaa;margin-bottom: 2px">Received store</div>
+                                    <div><b>{{vm.selectedInventory.receivedStore}}</b></div>
+                                </div>
+                            </div>
+                            <div class="right-content" style="width: 45%;float: right;">
+                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">
+                                    <div style="color: #aaa;margin-bottom: 2px">Store</div>
+                                    <div><b>{{vm.selectedInventory.issuedStore}}</b></div>
+                                </div>
+                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">
+                                    <div style="color: #aaa;margin-bottom: 2px">Issued date</div>
+                                    <div><b>{{vm.selectedInventory.issuedDate.substr(0,10)}}</b></div>
+                                </div>
+                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">
+                                    <div style="color: #aaa;margin-bottom: 2px">Received date</div>
+                                    <div><b>{{vm.selectedInventory.receivedDate.substr(0,10}}</b></div>
+                                </div>
+                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">
+                                    <div style="color: #aaa;margin-bottom: 2px">Supplier</div>
+                                    <div><b>{{vm.selectedInventory.supplier}}</b></div>
+                                </div>
+                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">
+                                    <div style="color: #aaa;margin-bottom: 2px">Customer</div>
+                                    <div><b>{{vm.selectedInventory.customer}}</b></div>
+                                </div>
+                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">
+                                    <div style="color: #aaa;margin-bottom: 2px">GRN/GIN</div>
+                                    <div><b>{{vm.selectedInventory.grnNo}}</b></div>
+                                </div>
+                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">
+                                    <div style="color: #aaa;margin-bottom: 2px">GRN/GIN</div>
+                                    <div><b>{{vm.selectedInventory.aodNo}}</b></div>
+                                </div>
+                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">
+                                    <div style="color: #aaa;margin-bottom: 2px">Status</div>
+                                    <div><b>{{vm.selectedInventory.status}}</b></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list" style="padding: 10px">
+                            <div class="list-header" style="padding: 7px 5px;background: #eee;overflow: hidden;">
+                                <div style="color: #aaa;width: 50%;float: left;">
+                                    Product
+                                </div>
+                                <div style="color: #aaa;width: 50%;float: left;text-align: right">
+                                    Quantity
+                                </div>
+                            </div>
+                            <div class="list-item" style="border-bottom: solid 1px #eee;padding: 10px;overflow: hidden;" ng-repeat="detail in vm.selectedInventory.rowproducts">
+                                <div style="float: left;color: #aaa;width: 50%">{{detail.productCode}}</div>
+                                <div style="float: left;color: #aaa;width: 50%;text-align: right">{{detail.quantity}}</div>
+                            </div>
+
+                        </div>
+                        <div class="template-footer" style="width: 100%;margin-top: 30px;padding: 10px;position:absolute;bottom: 0;">
+                            <div style="margin: 5px 0;font-size: 12px"><b>Notes</b></div>
+                            <div style="font-size: 12px;color: #aaa;padding-top: 5px;border-top: solid 1px #eee">
+                                {{vm.selectedInventory.note}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="inv-outline" md-whiteframe="2dp" layout="column">-->
+
+                        <!--<div class="inv-read-header">-->
+                            <!--<div class="invoice-date" ng-show="vm.selectedInventory.inventory_type=='Receipt'">Received On : {{vm.selectedInventory.receivedDate.substr(0,10)}}</div>-->
+                            <!--<div class="invoice-date" ng-show="vm.selectedInventory.inventory_type=='Issue'">Issued On : {{vm.selectedInventory.issuedDate.substr(0,10)}}</div>-->
+
+                            <!--<div layout="row" layout-align="space-between stretch">-->
+                                <!--<div class="client" flex>-->
+                                    <!--<div class="invoice-number" layout="row" layout-align="start center" ng-if="vm.selectedInventory.inventory_type=='Receipt'">-->
+                                        <!--<span class="title" flex="40">SUPPLIER </span>-->
+                                        <!--<span class="number">: {{vm.selectedInventory.supplier}}</span>-->
+                                    <!--</div>-->
+                                    <!--<div class="invoice-number" layout="row" layout-align="start center" ng-if="vm.selectedInventory.inventory_type=='Issue'">-->
+                                        <!--<span class="title" flex="40">CUSTOMER </span>-->
+                                        <!--<span class="number">: {{vm.selectedInventory.customer}}</span>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="invoice-number" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Receipt'">-->
+                                        <!--<span class="title" flex="40">GRN/GIN </span>-->
+                                        <!--<span class="number">: {{vm.selectedInventory.grnNo}}</span>-->
+                                    <!--</div>-->
+                                    <!--<div class="invoice-number" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Issue'">-->
+                                        <!--<span class="title" flex="40">GRN/GIN </span>-->
+                                        <!--<span class="number">: {{vm.selectedInventory.aodNo}}</span>-->
+                                    <!--</div>-->
+
+                                    <!--&lt;!&ndash;<div class="invoice-type" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Receipt'">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="title">RECEIVED STORE : </span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="number">{{vm.selectedInventory.receivedStore}}</span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<div class="invoice-type" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Issue'">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="title">ISSUED STORE : </span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="number">{{vm.selectedInventory.issuedStore}}</span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                                    <!--<div class="invoice-number" layout="row" layout-align="start center">-->
+                                        <!--<span class="title" flex="40">INVENTORY TYPE </span>-->
+                                        <!--<span class="number">: {{vm.selectedInventory.inventory_type}}</span>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="invoice-number" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Receipt'">-->
+                                        <!--<span class="title" flex="40">RECIEVED STORE </span>-->
+                                        <!--<span class="number">: {{vm.selectedInventory.receivedStore}}</span>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="invoice-number" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Issue'">-->
+                                        <!--<span class="title" flex="40">STORE </span>-->
+                                        <!--<span class="number">: {{vm.selectedInventory.issuedStore}}</span>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="invoice-number" layout="row" layout-align="start center">-->
+                                        <!--<span class="title" flex="40">STATUS </span>-->
+                                        <!--<span class="number">: {{vm.selectedInventory.status}}</span>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="info">-->
+                                        <!--<div class="title">{{vm.selectedInventory.UserName.toUpperCase()}}</div>-->
+                                        <!--<div class="address">{{vm.selectedInventory.UserAddress}}</div>-->
+                                        <!--<div class="phone">{{vm.selectedInventory.UserContact}}</div>-->
+                                        <!--<div class="email">{{vm.selectedInventory.UserEmail}}</div>-->
+                                        <!--&lt;!&ndash;<div class="website">{{vm.selectedInventory.UserWebSite}}</div>&ndash;&gt;-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                                <!--<div class="issuer" style="float: left;padding: 10px 0;" ng-class="{ 'md-accent-bg': companyLogo == ''}" layout="row" layout-align="start center">-->
+                                    <!--<table>-->
+                                        <!--<tr>-->
+                                            <!--<td>-->
+                                                <!--<div class="set-logo-wrap" ng-if="companyLogo != ''">-->
+                                                    <!--<div class="set-img">-->
+                                                        <!--<img style="width: 150px;height: auto;position: absolute;top: 0;bottom: 0;right: 0;left: 0;margin: auto;" ng-src="{{companyLogo}}" alt="" />-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <!--<div class="logo" layout="row" layout-align="center center" ng-if="companyLogo == ''" style="font-family: Roboto;border-right: solid 1px #fff;color: #fff;">-->
+                                                    <!--<span style="font-size: 72px">{{companyName| limitTo:1}}</span>-->
+                                                <!--</div>-->
+                                            <!--</td>-->
+                                            <!--<td>-->
+                                                <!--<div class="info" style="font-family: Roboto;max-width: 330px;">-->
+                                                    <!--<div class="">{{companyName}}</div>-->
+                                                    <!--<div class="address">{{companyAddress}}</div>-->
+                                                    <!--<div class="phone">{{companyPhone}}</div>-->
+                                                    <!--<div class="email">{{companyEmail}}</div>-->
+                                                <!--</div>-->
+                                            <!--</td>-->
+                                        <!--</tr>-->
+                                    <!--</table>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <!--<div class="inv-read-content">-->
+                            <!--<table class="simple invoice-table">-->
+                                <!--<thead>-->
+                                <!--<th>PRODUCT</th>-->
+                                <!--&lt;!&ndash;<th class="text-right">PRODUCT</th>&ndash;&gt;-->
+                                <!--<th class="text-right">QUANTITY</th>-->
+                                <!--</thead>-->
+                                <!--<tbody>-->
+                                <!--<tr ng-repeat="detail in vm.selectedInventory.rowproducts">-->
+                                    <!--<td>-->
+                                        <!--<div class="title">-->
+                                            <!--{{detail.productCode}}-->
+                                        <!--</div>-->
+                                    <!--</td>-->
+                                    <!--&lt;!&ndash;<td class="text-right">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;{{detail.productCode}}&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</td>&ndash;&gt;-->
+                                    <!--<td class="text-right">-->
+                                        <!--{{detail.quantity}}-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <!--</tbody>-->
+                            <!--</table>-->
+                        <!--</div>-->
+
+                        <!--<div class="invoice-number" layout-align="start center" style="margin-top: 30px">-->
+                            <!--<div class="title">Notes</div>-->
+                            <!--<div class="number" style="color: #aaaaaa;">{{vm.selectedInventory.note}}</div>-->
+                        <!--</div>-->
+
+                        <!--<div flex></div>-->
+
+                        <!--&lt;!&ndash;<div class="inv-read-footer" style="margin-top: 30px">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="note">Please pay within 7 days. Thank you for your business.</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div layout="row" layout-align="start start">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="logo md-accent-bg" layout="row" layout-align="center center">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div>D</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="small-note">&ndash;&gt;-->
+                        <!--&lt;!&ndash;In condimentum malesuada efficitur. Mauris volutpat placerat auctor. Ut ac congue dolor. Quisque&ndash;&gt;-->
+                        <!--&lt;!&ndash;scelerisque lacus sed feugiat fermentum. Cras aliquet facilisis pellentesque. Nunc hendrerit&ndash;&gt;-->
+                        <!--&lt;!&ndash;quam at leo commodo, a suscipit tellus dapibus. Etiam at felis volutpat est mollis lacinia.&ndash;&gt;-->
+                        <!--&lt;!&ndash;Mauris placerat sem sit amet velit mollis, in porttitor ex finibus. Proin eu nibh id libero&ndash;&gt;-->
+                        <!--&lt;!&ndash;tincidunt lacinia et eget eros.&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                        <!--&lt;!&ndash;Footer section&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="inv-read-footer" style="margin-top: 30px">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="note">{{FooterGreeting}}</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div layout="row" layout-align="start start">&ndash;&gt;-->
+                        <!--&lt;!&ndash;&lt;!&ndash;<div class="logo md-accent-bg" layout="row" layout-align="center center">&ndash;&gt;&ndash;&gt;-->
+                        <!--&lt;!&ndash;&lt;!&ndash;<div>{{companyName| limitTo:1}}</div>&ndash;&gt;&ndash;&gt;-->
+                        <!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="small-note">&ndash;&gt;-->
+                        <!--&lt;!&ndash;{{FooterDisclaimer}}&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                    <!--</div>-->
+                </md-content>
+            </div>
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+
+</div>

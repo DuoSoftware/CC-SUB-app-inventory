@@ -1,0 +1,79 @@
+<!-- SIDENAV HEADER -->
+<div class="header" layout="column" layout-align="space-between start">
+
+    <div class="logo" layout="row" layout-align="start center">
+        <span class="logo-icon">
+          <img src="app/core/app_icons/inventory_app_icon.png" alt=""/>
+        </span>
+        <span class="logo-text">Inventory</span>
+    </div>
+
+    <!-- <div class="account">
+        <div class="title">John Doe</div>
+        <md-select class="account-selection simplified" placeholder="Mail Selection"
+                   ng-model="vm.selectedAccount">
+            <md-option ng-repeat="(provider, address) in vm.accounts" value="{{provider}}">{{address}}
+            </md-option>
+        </md-select>
+    </div> -->
+
+</div>
+<!-- / SIDENAV HEADER -->
+
+<!-- SIDENAV CONTENT -->
+<md-content ms-scroll class="content" flex>
+
+    <div class="compose-button">
+        <md-button class="md-accent md-raised" aria-label="compose"
+                   ng-click="vm.addInvoice()">{{vm.pageTitle}}
+        </md-button>
+    </div>
+
+    <div class="navigation-simple" layout="column" ng-if="showFilers">
+      <div class="item subheader">Filters</div>
+
+      <md-button class="item" aria-label="inbox" ng-click="refreshlist()">
+        <div layout="row" layout-align="start center">
+          <md-icon md-font-icon="icon-star" class="s16"></md-icon>
+          <span class="title">All</span>
+        </div>
+      </md-button>
+
+      <md-button class="item" aria-label="starred" ng-click="filterMainList('status','Active')">
+        <div layout="row" layout-align="start center">
+          <md-icon md-font-icon="icon-thumb-up" class="s16"></md-icon>
+          <span class="title" flex>Active Inventories</span>
+        </div>
+      </md-button>
+
+      <md-button class="item" aria-label="starred" ng-click="filterMainList('status','Cancelled')">
+        <div layout="row" layout-align="start center">
+          <md-icon md-font-icon="icon-thumb-down" class="s16"></md-icon>
+          <span class="title" flex>Cancelled Inventories</span>
+        </div>
+      </md-button>
+
+      <!--<md-button class="item" aria-label="important">-->
+      <!--<div layout="row" layout-align="start center">-->
+      <!--<md-icon md-font-icon="icon-alert-circle" class="s16"></md-icon>-->
+      <!--<span class="title" flex>Cash Payments</span>-->
+      <!--</div>-->
+      <!--</md-button>-->
+      <div class="item subheader">Type</div>
+
+      <md-button class="item" aria-label="label notes" ng-click="filterMainList('type','GRN')">
+        <div layout="row" layout-align="start center">
+          <md-icon md-font-icon="icon-label" class="s16 blue-grey-fg"></md-icon>
+          <span class="title">Receipt (GRN)</span>
+        </div>
+      </md-button>
+      <md-button class="item" aria-label="label notes" ng-click="filterMainList('type','AOD')">
+        <div layout="row" layout-align="start center">
+          <md-icon md-font-icon="icon-label" class="s16 blue-grey-fg"></md-icon>
+          <span class="title">Issue (AOD)</span>
+        </div>
+      </md-button>
+    </div>
+
+</md-content>
+<!-- / SIDENAV CONTENT -->

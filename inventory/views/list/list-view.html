@@ -1,0 +1,44 @@
+<div class="main-list-preloader animate-fade-in-out" layout="row" layout-sm="column" layout-align="space-around" ng-if="loading1 && loading2">
+    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>
+<div class="main-empty-list" ng-if="vm.inventories.length == 0 && !loading1 && !loading2">
+    <div>
+        <img src="assets/images/empty-list.gif" alt="Nothing to show">
+        <h2>Nothing to Show</h2>
+        <p>Sorry, We could'nt find any record for the current inquiry</p>
+    </div>
+</div>
+<div class="list-item" layout="row" layout-align="center center" flex
+     ng-repeat="inventory in vm.inventories | filter: vm.search | filter: global.search | filter: vm.type"
+     md-ink-ripple
+     ng-click="switchInfoPane('show',inventory)"
+     ng-class="{'selected': activeInventory == inventory.guAODID || activeInventory == inventory.guGRNID && showInpageReadpane}">
+
+    <div layout="row" layout-align="center center" flex>
+
+        <div class="dual-info" layout="column" layout-align="center start" flex>
+            <span ng-if="inventory.inventory_type=='Receipt'">{{inventory.grnNo}}</span>
+            <span ng-if="inventory.inventory_type=='Issue'">{{inventory.aodNo}}</span>
+            <div class="dual-info-sub">
+                {{inventory.inventory_type}}
+            </div>
+        </div>
+
+        <div flex layout="column" layout-align="center start" ng-if="!showInpageReadpane">
+            <span ng-if="inventory.inventory_type=='Receipt'">{{inventory.receivedStore}}</span>
+            <span ng-if="inventory.inventory_type=='Issue'">{{inventory.issuedStore}}</span>
+        </div>
+
+        <div flex layout="column" layout-align="center start" ng-if="!showInpageReadpane">
+            <span>{{inventory.createdDate | parseDate | date: 'dd'}} {{inventory.createdDate | parseDate | date: 'MMMM' | limitTo: 3}} {{inventory.createdDate | parseDate | date: 'yyyy'}}</span>
+        </div>
+
+        <div class="status" layout="column" layout-align="center start" ng-class="{'flex-30':showInpageReadpane == true,'flex-10': showInpageReadpane == false}">
+
+            <span class="pill" layout="row" layout-align="center center" ng-class="{'negative':inventory.status==='Inactive','positive':inventory.status==='Active'}">{{inventory.status}}</span>
+        </div>
+    </div>
+</div>
+<div class="invoice-list-item" ng-hide="hideSearchMore || !listLoaded" layout="row" layout-align="center center">
+    <md-button ng-click="loadByKeywordInventory(vm.search,vm.search.length)" class="md-primary" style="font-size: 12px;font-weight: 400"><md-icon md-font-icon="icon-magnify"></md-icon> More</md-button>
+</div>

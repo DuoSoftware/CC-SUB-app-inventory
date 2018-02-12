@@ -1,0 +1,591 @@
+<!--<div id="inventory-read" class="compact page-layout blank" layout="row">-->
+  <!--<div class="invoice-read-container" flex>-->
+
+    <!--&lt;!&ndash; INVOICE &ndash;&gt;-->
+    <!--<div class="card md-whiteframe-8dp" layout="row" layout-align="center center">-->
+
+      <!--<div class="inv-outline" md-whiteframe="2dp" layout="column">-->
+
+        <!--<div class="inv-read-header">-->
+          <!--<div class="invoice-date" ng-show="vm.selectedInventory.inventory_type=='Receipt'">Received On : {{vm.selectedInventory.receivedDate.substr(0,10)}}</div>-->
+          <!--<div class="invoice-date" ng-show="vm.selectedInventory.inventory_type=='Issue'">Issued On : {{vm.selectedInventory.issuedDate.substr(0,10)}}</div>-->
+
+          <!--<div layout="row" layout-align="space-between stretch">-->
+            <!--<div class="client" flex>-->
+              <!--<div class="invoice-number" layout="row" layout-align="start center" ng-if="vm.selectedInventory.inventory_type=='Receipt'">-->
+                <!--<span class="title" flex="40">SUPPLIER </span>-->
+                <!--<span class="number">: {{vm.selectedInventory.supplier}}</span>-->
+              <!--</div>-->
+              <!--<div class="invoice-number" layout="row" layout-align="start center" ng-if="vm.selectedInventory.inventory_type=='Issue'">-->
+                <!--<span class="title" flex="40">CUSTOMER </span>-->
+                <!--<span class="number">: {{vm.selectedInventory.customer}}</span>-->
+              <!--</div>-->
+
+              <!--<div class="invoice-number" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Receipt'">-->
+                <!--<span class="title" flex="40">GRN/GIN </span>-->
+                <!--<span class="number">: {{vm.selectedInventory.grnNo}}</span>-->
+              <!--</div>-->
+              <!--<div class="invoice-number" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Issue'">-->
+                <!--<span class="title" flex="40">GRN/GIN </span>-->
+                <!--<span class="number">: {{vm.selectedInventory.aodNo}}</span>-->
+              <!--</div>-->
+
+              <!--&lt;!&ndash;<div class="invoice-type" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Receipt'">&ndash;&gt;-->
+              <!--&lt;!&ndash;<span class="title">RECEIVED STORE : </span>&ndash;&gt;-->
+              <!--&lt;!&ndash;<span class="number">{{vm.selectedInventory.receivedStore}}</span>&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+              <!--&lt;!&ndash;<div class="invoice-type" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Issue'">&ndash;&gt;-->
+              <!--&lt;!&ndash;<span class="title">ISSUED STORE : </span>&ndash;&gt;-->
+              <!--&lt;!&ndash;<span class="number">{{vm.selectedInventory.issuedStore}}</span>&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+
+              <!--<div class="invoice-number" layout="row" layout-align="start center">-->
+                <!--<span class="title" flex="40">INVENTORY TYPE </span>-->
+                <!--<span class="number">: {{vm.selectedInventory.inventory_type}}</span>-->
+              <!--</div>-->
+
+              <!--<div class="invoice-number" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Receipt'">-->
+                <!--<span class="title" flex="40">RECIEVED STORE </span>-->
+                <!--<span class="number">: {{vm.selectedInventory.receivedStore}}</span>-->
+              <!--</div>-->
+
+              <!--<div class="invoice-number" layout="row" layout-align="start center" ng-show="vm.selectedInventory.inventory_type=='Issue'">-->
+                <!--<span class="title" flex="40">STORE </span>-->
+                <!--<span class="number">: {{vm.selectedInventory.issuedStore}}</span>-->
+              <!--</div>-->
+
+              <!--<div class="invoice-number" layout="row" layout-align="start center">-->
+                <!--<span class="title" flex="40">STATUS </span>-->
+                <!--<span class="number">: {{vm.selectedInventory.status}}</span>-->
+              <!--</div>-->
+
+              <!--<div class="info">-->
+                <!--<div class="title">{{vm.selectedInventory.UserName.toUpperCase()}}</div>-->
+                <!--<div class="address">{{vm.selectedInventory.UserAddress}}</div>-->
+                <!--<div class="phone">{{vm.selectedInventory.UserContact}}</div>-->
+                <!--<div class="email">{{vm.selectedInventory.UserEmail}}</div>-->
+                <!--&lt;!&ndash;<div class="website">{{vm.selectedInventory.UserWebSite}}</div>&ndash;&gt;-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="issuer" style="float: left;padding: 10px 0;" ng-class="{ 'md-accent-bg': companyLogo == ''}" layout="row" layout-align="start center">-->
+              <!--<table>-->
+                <!--<tr>-->
+                  <!--<td>-->
+                    <!--<div class="set-logo-wrap" ng-if="companyLogo != ''">-->
+                      <!--<div class="set-img">-->
+                        <!--<img style="width: 150px;height: auto;position: absolute;top: 0;bottom: 0;right: 0;left: 0;margin: auto;" ng-src="{{companyLogo}}" alt="" />-->
+                      <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="logo" layout="row" layout-align="center center" ng-if="companyLogo == ''" style="font-family: Roboto;border-right: solid 1px #fff;color: #fff;">-->
+                      <!--<span style="font-size: 72px">{{companyName| limitTo:1}}</span>-->
+                    <!--</div>-->
+                  <!--</td>-->
+                  <!--<td>-->
+                    <!--<div class="info" style="font-family: Roboto;max-width: 330px;">-->
+                      <!--<div class="">{{companyName}}</div>-->
+                      <!--<div class="address">{{companyAddress}}</div>-->
+                      <!--<div class="phone">{{companyPhone}}</div>-->
+                      <!--<div class="email">{{companyEmail}}</div>-->
+                    <!--</div>-->
+                  <!--</td>-->
+                <!--</tr>-->
+              <!--</table>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="inv-read-content">-->
+          <!--<table class="simple invoice-table">-->
+            <!--<thead>-->
+            <!--<th>PRODUCT</th>-->
+            <!--&lt;!&ndash;<th class="text-right">PRODUCT</th>&ndash;&gt;-->
+            <!--<th class="text-right">QUANTITY</th>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<tr ng-repeat="detail in vm.selectedInventory.rowproducts">-->
+              <!--<td>-->
+                <!--<div class="title">-->
+                  <!--{{detail.productCode}}-->
+                <!--</div>-->
+              <!--</td>-->
+              <!--&lt;!&ndash;<td class="text-right">&ndash;&gt;-->
+              <!--&lt;!&ndash;{{detail.productCode}}&ndash;&gt;-->
+              <!--&lt;!&ndash;</td>&ndash;&gt;-->
+              <!--<td class="text-right">-->
+                <!--{{detail.quantity}}-->
+              <!--</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+          <!--</table>-->
+        <!--</div>-->
+
+        <!--<div class="invoice-number" layout-align="start center" style="margin-top: 30px">-->
+          <!--<div class="title">Notes</div>-->
+          <!--<div class="number" style="color: #aaaaaa;">{{vm.selectedInventory.note}}</div>-->
+        <!--</div>-->
+
+        <!--<div flex></div>-->
+
+        <!--&lt;!&ndash;<div class="inv-read-footer" style="margin-top: 30px">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="note">Please pay within 7 days. Thank you for your business.</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div layout="row" layout-align="start start">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="logo md-accent-bg" layout="row" layout-align="center center">&ndash;&gt;-->
+        <!--&lt;!&ndash;<div>D</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="small-note">&ndash;&gt;-->
+        <!--&lt;!&ndash;In condimentum malesuada efficitur. Mauris volutpat placerat auctor. Ut ac congue dolor. Quisque&ndash;&gt;-->
+        <!--&lt;!&ndash;scelerisque lacus sed feugiat fermentum. Cras aliquet facilisis pellentesque. Nunc hendrerit&ndash;&gt;-->
+        <!--&lt;!&ndash;quam at leo commodo, a suscipit tellus dapibus. Etiam at felis volutpat est mollis lacinia.&ndash;&gt;-->
+        <!--&lt;!&ndash;Mauris placerat sem sit amet velit mollis, in porttitor ex finibus. Proin eu nibh id libero&ndash;&gt;-->
+        <!--&lt;!&ndash;tincidunt lacinia et eget eros.&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+        <!--&lt;!&ndash;Footer section&ndash;&gt;-->
+        <!--&lt;!&ndash;<div class="inv-read-footer" style="margin-top: 30px">&ndash;&gt;-->
+          <!--&lt;!&ndash;<div class="note">{{FooterGreeting}}</div>&ndash;&gt;-->
+          <!--&lt;!&ndash;<div layout="row" layout-align="start start">&ndash;&gt;-->
+            <!--&lt;!&ndash;&lt;!&ndash;<div class="logo md-accent-bg" layout="row" layout-align="center center">&ndash;&gt;&ndash;&gt;-->
+              <!--&lt;!&ndash;&lt;!&ndash;<div>{{companyName| limitTo:1}}</div>&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="small-note">&ndash;&gt;-->
+              <!--&lt;!&ndash;{{FooterDisclaimer}}&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+      <!--</div>-->
+
+    <!--</div>-->
+    <!--&lt;!&ndash; / INVOICE &ndash;&gt;-->
+
+    <!--&lt;!&ndash; Use the following element to add breaks to your pages &ndash;&gt;-->
+    <!--&lt;!&ndash; This will make sure that the section after this element will be printed on a new page &ndash;&gt;-->
+    <!--<div class="page-break"></div>-->
+
+  <!--</div>-->
+<!--</div>-->
+
+<form ng-if="inventory_type == 'Receipt'" id="editForm" name="vm.editForm" ng-submit="submit()" novalidate>
+    <!--CREATE NEW INVOICE _ CARDED=================================================-->
+    <md-card flex class="input-block-gen">
+        <md-card-title>
+            <div layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-cog"></md-icon> <h3>General details</h3>
+            </div>
+        </md-card-title>
+        <md-card-content>
+            <div flex class="text-center mb-20">
+                <md-input-container>
+                    <md-radio-group name="planType" ng-required ng-model="inventory_type" ng-init="inventory_type='Receipt'" layout="row" class="cc-switch-buttons-group" ng-change="changeType(inventory_type)">
+                        <md-radio-button value="Receipt" class="cc-switch-buttons" md-ink-ripple ng-disabled="inventory_type == 'Receipt'" ng-style="inventory_type == 'Issue' ? {'z-index':'1'} : {'z-index':'0'}">Receipt</md-radio-button>
+                        <md-radio-button value="Issue" class="cc-switch-buttons" md-ink-ripple ng-disabled="inventory_type == 'Issue'" ng-style="inventory_type == 'Receipt' ? {'z-index':'1'} : {'z-index':'0'}">Issue</md-radio-button>
+                    </md-radio-group>
+                </md-input-container>
+                <!--<md-input-container flex="30">-->
+                    <!--<label>Inventory Type</label>-->
+                    <!--<md-select flex ng-required="true" ng-model="inventory_type" ng-init="inventory_type='Receipt'" ng-change="changeType(inventory_type)">-->
+                        <!--<md-option value="Receipt" name="rdocat">Receipt</md-option>-->
+                        <!--<md-option value="Issue" name="rdocat">Issue</md-option>-->
+                    <!--</md-select>-->
+                <!--</md-input-container>-->
+            </div>
+
+            <div layout="row">
+                <div class="rel" flex="30" layout="row">
+                    <md-progress-circular ng-if="vm.isAutoDisabledSupp"></md-progress-circular>
+                    <md-autocomplete flex required class="mt-20"
+                                     md-input-id="acProfileIdSupp"
+                                     ng-keydown="toggleProfileSearchMreSupp($event)"
+                                     ng-required="true"
+                                     md-select-on-match
+                                     ng-keypress="enter($event)"
+                                     ng-disabled="vm.isAutoDisabledSupp"
+                                     md-input-name="autocompleteField1"
+                                     md-no-cache="vm.noCache"
+                                     md-selected-item="customer_supplier.supplier"
+                                     md-search-text="vm.searchText1"
+                                     md-items="item in vm.querySearch(vm.searchText1,'Supplier')"
+                                     md-search-text-change="loadProfileByKeywordSupp(vm.searchText1,'Supplier')"
+                                     md-item-text="item.profilename"
+                                     md-floating-label="Name"
+                                     md-min-length=""
+                                     autocomplete-validator>
+                        <md-item-template>
+                            <span md-highlight-text="vm.searchText1">{{item.profilename}}</span>
+                        </md-item-template>
+                        <div ng-messages="vm.editForm.autocompleteField1.$error">
+                            <div ng-message="invalidInput" ng-if="!vm.editForm.autocompleteField1.$error.required">Please select a valid name</div>
+                        </div>
+                    </md-autocomplete>
+                    <md-input-container>
+                        <md-button ng-click="addNewUser($event, 'Supplier')" class="md-icon-button md-accent"><md-icon md-font-icon="icon-plus-circle"></md-icon><md-tooltip>Add new</md-tooltip> </md-button>
+                    </md-input-container>
+                </div>
+
+                <div flex="5"></div>
+
+                <div flex="30" layout="row">
+                    <md-input-container flex>
+                        <label>Received store</label>
+                        <md-select ng-required="true" name="receivedStore" ng-model="store_details.receivedStore" required>
+                            <!--<md-option ng-repeat="store in storeslist" ng-value="store">{{store.storename}}</md-option>-->
+                            <md-option value="defaultStore">Default store</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button ng-click="addStore($event)" class="md-icon-button md-accent"><md-icon md-font-icon="icon-plus-circle"></md-icon><md-tooltip>Add new</md-tooltip> </md-button>
+                    </md-input-container>
+                </div>
+
+                <div flex="5"></div>
+
+                <md-input-container flex="30">
+                    <label>Received date</label>
+                    <md-datepicker ng-model="content.receivedDate" md-max-date="maxDateAvailable" md-open-on-focus></md-datepicker>
+                </md-input-container>
+            </div>
+
+        </md-card-content>
+    </md-card>
+
+    <md-card flex class="input-block-gen">
+        <md-card-title>
+            <div layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-package"></md-icon> <h3>Product Details</h3>
+            </div>
+        </md-card-title>
+        <md-card-content md-whiteframe="1dp">
+            <div layout="row" ng-repeat="row in rows" class="highlight-blue solid p-5 add-item-row">
+
+                <div flex="30" layout="row">
+                    <md-autocomplete required class="mt-15" ng-required="true" flex
+                                     md-input-id="{{row.acProductIdRecp}}"
+                                     ng-keydown="toggleProductSearchMre($event,rows,$index)"
+                                     md-select-on-match
+                                     ng-keypress="enter($event)"
+                                     ng-disabled="row.isAutoDisabled"
+                                     md-input-name="autocompleteField3"
+                                     md-no-cache="vm.noCache"
+                                     md-selected-item="row.product"
+                                     md-selected-item-change="validateProduct(rows, row.product, $index)"
+                                     md-search-text="vm.searchText3[$index]"
+                                     md-search-text-change="loadByKeywordDropDown(vm.searchText3[$index],rows,$index)"
+                                     md-floating-label="Product"
+                                     md-items="prod in querySearchProduct(vm.searchText3[$index],$index,rows)"
+                                     md-item-text="prod.code"
+                                     md-min-length=""
+                                     autocomplete-validator>
+                        <md-not-found>No items.</md-not-found>
+                        <md-item-template>
+                            <span md-highlight-text="vm.searchText3">{{prod.code}}</span>
+                        </md-item-template>
+                        <div ng-messages="vm.editForm.autocompleteField3.$error">
+                            <div ng-message="invalidInput" ng-if="!vm.editForm.autocompleteField3.$error.required">Please select a valid product</div>
+                        </div>
+                    </md-autocomplete>
+                </div>
+                <div flex="5"></div>
+                <md-input-container class="mb-0 mt-15" id="invProdQty" flex="30">
+                    <label>Quantity</label>
+                    <input ng-change="checkEmptyQty()" type="number" ng-required="true" min="1" ng-model="row.qty">
+                </md-input-container>
+                <div flex></div>
+                <div class="w-5"></div>
+                <div layout="column" layout-align="center center" class="v-rule-gray">
+                    <md-button ng-click="removerow($index,rows);" class="md-icon-button md-warn"><md-icon md-font-icon="icon-close-circle"></md-icon><md-tooltip>Remove row</md-tooltip> </md-button>
+                </div>
+            </div>
+
+
+            <!--<div class="prod-row-wrap">-->
+                <!--<div layout-gt-sm="row" ng-repeat="row in rows" class="add-item-row">-->
+                    <!--<div flex="30" class="rel">-->
+                        <!--<div layout="row" layout-align="center center" class="preloader-dot-auto" ng-show="row.isAutoDisabled" >-->
+                            <!--<img src="assets/images/142.gif" alt=""/>-->
+                        <!--</div>-->
+                        <!--<md-autocomplete required class="p-l-50" ng-required="true"-->
+                                         <!--md-input-id="{{row.acProductIdRecp}}"-->
+                                         <!--ng-keydown="toggleProductSearchMre($event,rows,$index)"-->
+                                         <!--md-select-on-match-->
+                                         <!--ng-keypress="enter($event)"-->
+                                         <!--ng-disabled="row.isAutoDisabled"-->
+                                         <!--md-input-name="autocompleteField3"-->
+                                         <!--md-no-cache="vm.noCache"-->
+                                         <!--md-selected-item="row.product"-->
+                                         <!--md-selected-item-change="validateProduct(rows, row.product, $index)"-->
+                                         <!--md-search-text="vm.searchText3[$index]"-->
+                                         <!--md-search-text-change="loadByKeywordDropDown(vm.searchText3[$index],rows,$index)"-->
+                                         <!--md-floating-label="Product"-->
+                                         <!--md-items="prod in querySearchProduct(vm.searchText3[$index],$index,rows)"-->
+                                         <!--md-item-text="prod.code"-->
+                                         <!--md-min-length=""-->
+                                         <!--autocomplete-validator>-->
+                            <!--<md-not-found>No items.</md-not-found>-->
+                            <!--<md-item-template>-->
+                                <!--<span md-highlight-text="vm.searchText3">{{prod.code}}</span>-->
+                            <!--</md-item-template>-->
+                            <!--<div ng-messages="vm.editForm.autocompleteField3.$error">-->
+                                <!--<div ng-message="invalidInput" ng-if="!vm.editForm.autocompleteField3.$error.required">Please select a valid product</div>-->
+                            <!--</div>-->
+                        <!--</md-autocomplete>-->
+                    <!--</div>-->
+
+                    <!--<div flex="5"></div>-->
+
+                    <!--<div flex="30">-->
+                        <!--<md-input-container class="md-block" id="invProdQty">-->
+                            <!--<label>Quantity</label>-->
+                            <!--<input ng-change="checkEmptyQty()" type="number" ng-required="true" min="1" ng-model="row.qty">-->
+                        <!--</md-input-container>-->
+                    <!--</div>-->
+
+                    <!--<div flex></div>-->
+
+                    <!--<div layout="column" layout-align="center center">-->
+                        <!--<md-button ng-click="removerow($index,rows);" class="md-icon-button md-warn"><md-icon md-font-icon="icon-close-circle"></md-icon><md-tooltip>Remove row</md-tooltip> </md-button>-->
+                    <!--</div>-->
+
+                <!--</div>-->
+            <!--</div>-->
+
+            <div layout="row" layout-align="end center">
+                <!--<md-button ng-click="addNewProduct($event)" class="md-icon-button md-accent"><md-icon md-font-icon="icon-plus-circle"></md-icon><md-tooltip>Add new product</md-tooltip> </md-button>-->
+                <md-button ng-click="addNewProduct($event)" class="md-accent">Add New Product</md-button>
+                <!--<md-button ng-click="addrow(rows);" class="md-raised md-accent">ADD Row</md-button>-->
+                <md-button ng-click="addrow(rows)" class="md-icon-button md-accent mr-10"><md-icon md-font-icon="icon-plus-circle"></md-icon><md-tooltip>Add new</md-tooltip> </md-button>
+            </div>
+        </md-card-content>
+    </md-card>
+
+    <md-card flex class="input-block-gen">
+        <md-card-title>
+            <div layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-note"></md-icon> <h3>Other</h3>
+            </div>
+        </md-card-title>
+        <md-card-content>
+            <div layout="row">
+                <md-input-container flex>
+                    <label>Notes</label>
+                    <input ng-required="false" md-maxlength="300" ng-maxlength="300" type="text" name="note" ng-model="content.note">
+                    <div ng-messages="vm.editForm.note.$error">
+                        <div ng-message="maxlength">Note must be between 1-300 characters</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </md-card-content>
+    </md-card>
+    <!--CREATE NEW INVOICE _ CARDED=================================================-->
+</form>
+
+<form ng-if="inventory_type == 'Issue'" id="editForm2" name="vm.editForm2" ng-submit="submit2()" novalidate>
+    <!--CREATE NEW INVOICE _ CARDED=================================================-->
+    <md-card flex class="input-block-gen">
+        <md-card-title>
+            <div layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-cog"></md-icon> <h3>General Details</h3>
+            </div>
+        </md-card-title>
+        <md-card-content>
+            <div class="mb-20 text-center">
+                <md-input-container>
+                    <md-radio-group name="planType" ng-required ng-model="inventory_type" ng-init="inventory_type='Issue'" layout="row" class="cc-switch-buttons-group" ng-change="changeType(inventory_type)">
+                        <md-radio-button value="Receipt" class="cc-switch-buttons" md-ink-ripple ng-disabled="inventory_type == 'Receipt'" ng-style="inventory_type == 'Issue' ? {'z-index':'1'} : {'z-index':'0'}">Receipt</md-radio-button>
+                        <md-radio-button value="Issue" class="cc-switch-buttons" md-ink-ripple ng-disabled="inventory_type == 'Issue'" ng-style="inventory_type == 'Receipt' ? {'z-index':'1'} : {'z-index':'0'}">Issue</md-radio-button>
+                    </md-radio-group>
+                </md-input-container>
+                <!--<md-input-container flex="30">-->
+                    <!--<label>Inventory Type</label>-->
+                    <!--<md-select flex ng-required="true" ng-model="inventory_type" ng-init="inventory_type='Issue'" ng-change="changeType(inventory_type)">-->
+                        <!--<md-option value="Receipt" name="rdocat">Receipt</md-option>-->
+                        <!--<md-option value="Issue" name="rdocat">Issue</md-option>-->
+                    <!--</md-select>-->
+                <!--</md-input-container>-->
+            </div>
+
+            <div layout="row">
+                <div class="rel" flex="30" layout="row">
+                    <div layout="row" layout-align="center center" class="preloader-dot-auto" ng-show="vm.isAutoDisabledDeal" >
+                        <img src="assets/images/142.gif" alt=""/>
+                    </div>
+                    <md-autocomplete flex required
+                                     class="mt-20"
+                                     md-input-id="acProfileIdDeal"
+                                     ng-keydown="toggleProfileSearchMreDeal($event)"
+                                     ng-required="true"
+                                     md-select-on-match
+                                     ng-keypress="enter($event)"
+                                     ng-disabled="vm.isAutoDisabledDeal"
+                                     md-input-name="autocompleteField2"
+                                     md-no-cache="vm.noCache"
+                                     md-selected-item="customer_supplier.customer"
+                                     md-search-text="vm.searchText2"
+                                     md-items="item in vm.querySearch(vm.searchText2,'Customer')"
+                                     md-search-text-change="loadProfileByKeywordDeal(vm.searchText2,'Dealer')"
+                                     md-item-text="item.profilename"
+                                     md-floating-label="Dealer"
+                                     md-min-length=""
+                                     autocomplete-validator style="height: 65px;">
+                        <md-item-template>
+                            <span md-highlight-text="vm.searchText2">{{item.profilename}}</span>
+                        </md-item-template>
+                        <div ng-messages="vm.editForm2.autocompleteField2.$error">
+                            <div ng-message="invalidInput" ng-if="!vm.editForm2.autocompleteField2.$error.required">Please select a valid name</div>
+                        </div>
+                    </md-autocomplete>
+                    <md-input-container>
+                        <md-button ng-click="addNewUser($event, 'Dealer')" class="md-icon-button md-accent"><md-icon md-font-icon="icon-plus-circle"></md-icon><md-tooltip>Add new</md-tooltip> </md-button>
+                    </md-input-container>
+                </div>
+
+                <div flex="5"></div>
+
+                <div flex="30" layout="row">
+                    <md-input-container flex>
+                        <label>Issued Store</label>
+                        <md-select ng-required="true" name="issuedStore" ng-model="store_details.issuedStore" required>
+                            <!--<md-option ng-repeat="store in storeslist" ng-value="store">{{store.storename}}</md-option>-->
+                            <md-option ng-value="defaultStore">Default Store</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container>
+                        <md-button ng-click="addStore($event)" class="md-icon-button md-accent"><md-icon md-font-icon="icon-plus-circle"></md-icon><md-tooltip>Add new</md-tooltip> </md-button>
+                    </md-input-container>
+                </div>
+
+                <div flex="5"></div>
+
+                <md-input-container flex="30">
+                    <label>Issued Date</label>
+                    <input ng-required="false" minlength="null" md-maxlength="null" ng-disabled="true" name="issuedDate" ng-pattern="" ng-model="aodcontent.issuedDate" />
+                </md-input-container>
+            </div>
+
+        </md-card-content>
+    </md-card>
+
+    <md-card flex class="input-block-gen">
+        <md-card-title>
+            <div layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-package"></md-icon> <h3>Product Details</h3>
+            </div>
+        </md-card-title>
+        <md-card-content md-whiteframe="1dp">
+
+            <div class="prod-row-wrap2">
+
+
+                <div layout="row" ng-repeat="row in rowsissue" class="highlight-blue solid p-5 add-item-row">
+                    <md-autocomplete required class="mt-20" ng-required="true" flex="30"
+                                     md-input-id="{{row.acProductIdIssu}}"
+                                     ng-keydown="toggleProductSearchMre($event,rowsissue,$index)"
+                                     md-select-on-match
+                                     ng-keypress="enter($event)"
+                                     ng-disabled="row.isAutoDisabled"
+                                     md-input-name="autocompleteField5"
+                                     md-no-cache="vm.noCache"
+                                     md-selected-item="row.product"
+                                     md-selected-item-change="validateProduct(rowsissue, row.product, $index)"
+                                     md-search-text="vm.searchText4[$index]"
+                                     md-search-text-change="loadByKeywordDropDown(vm.searchText4[$index],rowsissue,$index)"
+                                     md-floating-label="Product"
+                                     md-items="prod in querySearchProduct(vm.searchText4[$index],$index,rowsissue)"
+                                     md-item-text="prod.code"
+                                     md-min-length="" autocomplete-validator>
+                        <md-not-found>No items.</md-not-found>
+                        <md-item-template>
+                            <span md-highlight-text="vm.searchText4">{{prod.code}}</span>
+                        </md-item-template>
+                        <div ng-messages="vm.editForm2.autocompleteField5.$error">
+                            <div ng-message="invalidInput" ng-if="!vm.editForm2.autocompleteField5.$error.required">Please select a valid product</div>
+                        </div>
+                    </md-autocomplete>
+                    <div flex="5"></div>
+                    <md-input-container class="mb-0 mt-20" id="invProdQty" flex="30">
+                        <label>Quantity</label>
+                        <input ng-change="checkEmptyQty()" type="number" ng-required="true" min="1" ng-blur="checkstock(row.product, row.qty, rowsissue, $index)" ng-model="row.qty">
+                    </md-input-container>
+                    <div flex></div>
+                    <div class="w-5"></div>
+                    <div layout="column" layout-align="center center" class="v-rule-gray">
+                        <md-button ng-click="removerow($index,rowsissue);" class="md-icon-button md-warn"><md-icon md-font-icon="icon-close-circle"></md-icon><md-tooltip>Remove row</md-tooltip> </md-button>
+                    </div>
+                </div>
+
+
+                <!--<div layout-gt-sm="row" ng-repeat="row in rowsissue" class="add-item-row">-->
+                    <!--<div flex="30" class="rel">-->
+                        <!--<div layout="row" layout-align="center center" class="preloader-dot-auto" ng-show="row.isAutoDisabled" >-->
+                            <!--<img src="assets/images/142.gif" alt=""/>-->
+                        <!--</div>-->
+                        <!--<md-autocomplete required class="p-l-50" ng-required="true"-->
+                                         <!--md-input-id="{{row.acProductIdIssu}}"-->
+                                         <!--ng-keydown="toggleProductSearchMre($event,rowsissue,$index)"-->
+                                         <!--md-select-on-match-->
+                                         <!--ng-keypress="enter($event)"-->
+                                         <!--ng-disabled="row.isAutoDisabled"-->
+                                         <!--md-input-name="autocompleteField5"-->
+                                         <!--md-no-cache="vm.noCache"-->
+                                         <!--md-selected-item="row.product"-->
+                                         <!--md-selected-item-change="validateProduct(rowsissue, row.product, $index)"-->
+                                         <!--md-search-text="vm.searchText4[$index]"-->
+                                         <!--md-search-text-change="loadByKeywordDropDown(vm.searchText4[$index],rowsissue,$index)"-->
+                                         <!--md-floating-label="Product"-->
+                                         <!--md-items="prod in querySearchProduct(vm.searchText4[$index],$index,rowsissue)"-->
+                                         <!--md-item-text="prod.code"-->
+                                         <!--md-min-length="" autocomplete-validator>-->
+                            <!--<md-not-found>No items.</md-not-found>-->
+                            <!--<md-item-template>-->
+                                <!--<span md-highlight-text="vm.searchText4">{{prod.code}}</span>-->
+                            <!--</md-item-template>-->
+                            <!--<div ng-messages="vm.editForm2.autocompleteField5.$error">-->
+                                <!--<div ng-message="invalidInput" ng-if="!vm.editForm2.autocompleteField5.$error.required">Please select a valid product</div>-->
+                            <!--</div>-->
+                        <!--</md-autocomplete>-->
+                    <!--</div>-->
+                    <!--<div flex="5"></div>-->
+                    <!--<div flex="30">-->
+                        <!--<md-input-container class="md-block" id="invProdQty">-->
+                            <!--<label>Quantity</label>-->
+                            <!--<input ng-change="checkEmptyQty()" type="number" ng-required="true" min="1" ng-blur="checkstock(row.product, row.qty, rowsissue, $index)" ng-model="row.qty">-->
+                        <!--</md-input-container>-->
+                    <!--</div>-->
+                    <!--<div flex></div>-->
+                    <!--<div layout="column" layout-align="center center">-->
+                        <!--<md-button ng-click="removerow($index,rowsissue);" class="md-icon-button md-warn"><md-icon md-font-icon="icon-close-circle"></md-icon><md-tooltip>Remove row</md-tooltip> </md-button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+
+            <div layout="row" layout-align="end center">
+                <md-button ng-click="addNewProduct($event)" class="md-accent">Add New Product</md-button>
+                <md-button ng-click="addrow(rowsissue);" class="md-icon-button md-accent mr-10"><md-icon md-font-icon="icon-plus-circle"></md-icon><md-tooltip>Add new</md-tooltip> </md-button>
+            </div>
+        </md-card-content>
+    </md-card>
+
+    <md-card flex class="input-block-gen">
+        <md-card-title>
+            <div layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-note"></md-icon> <h3>Other</h3>
+            </div>
+        </md-card-title>
+        <md-card-content>
+            <div layout="row">
+                <md-input-container flex>
+                    <label>Notes</label>
+                    <input ng-required="false" minlength="null" md-maxlength="null" name="note" ng-pattern="" ng-model="aodcontent.note">
+                    <div ng-messages="vm.editForm2.note.$error">
+                        <div ng-message="maxlength">Note must be between 1-300 characters</div>
+                    </div>
+                </md-input-container>
+            </div>
+        </md-card-content>
+    </md-card>
+    <!--CREATE NEW INVOICE _ CARDED=================================================-->
+</form>
+
