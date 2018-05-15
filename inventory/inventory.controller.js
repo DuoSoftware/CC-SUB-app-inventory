@@ -15,7 +15,7 @@
         .controller('InventoryController', InventoryController);
 
     /** @ngInject */ //$productHandler,
-    function InventoryController($scope, $document, $timeout, notifications, $mdToast, $mdDialog, $mdMedia, $mdSidenav, $charge, $productHandler, $filter, $rootScope)
+    function InventoryController($scope, $document, $timeout, notifications, $mdToast, $mdDialog, $mdMedia, $mdSidenav, $charge, $productHandler, $azureSearchHandle, $filter, $rootScope)
     {
         var vm = this;
 
@@ -89,7 +89,7 @@
 				$scope.activeInventory = grnid;
                 $charge.inventory().getHeaderByID(grnid).success(function(data)
                 {
-                    console.log(data);
+                    //console.log(data);
                     for(var i=0;i<data.length;i++)
                     {
                         rowproducts.push({
@@ -121,7 +121,7 @@
 
 				}).error(function(data)
                 {
-                    console.log(data);
+                    //console.log(data);
 					$scope.readLoading = false;
 				})
             }
@@ -131,7 +131,7 @@
 				$scope.activeInventory = aodid;
 				$charge.aod().getHeaderByID(aodid).success(function(data)
                 {
-                    console.log(data);
+                    //console.log(data);
                     for(var i=0;i<data.length;i++)
                     {
                         rowproducts.push({
@@ -162,7 +162,7 @@
 					$scope.readLoading = false;
 				}).error(function(data)
                 {
-                    console.log(data);
+                    //console.log(data);
 					$scope.readLoading = false;
 				})
             }
@@ -418,9 +418,9 @@
         $scope.productlist = [];
         $scope.storeslist = [];
 
-        $charge.commondata().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_InventoryAttributes","Store").success(function(data)
+        $charge.settingsapp().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_InventoryAttributes","Store").success(function(data)
         {
-            console.log(data);
+            //console.log(data);
             $rootScope.isStoreLoaded = true;
 
             for(var i=0;i<data.length;i++) {
@@ -432,7 +432,7 @@
                 });
             }
         }).error(function(data) {
-            console.log(data);
+            //console.log(data);
             $rootScope.isStoreLoaded = false;
         })
 
@@ -445,10 +445,10 @@
             $scope.companyLogo=data[4].RecordFieldData;
 
         }).error(function(data) {
-            console.log(data);
+            //console.log(data);
         })
 
-        $charge.commondata().getDuobaseValuesByTableName("CTS_FooterAttributes").success(function(data) {
+        $charge.settingsapp().getDuobaseValuesByTableName("CTS_FooterAttributes").success(function(data) {
 
             $scope.FooterData=data;
             $scope.FooterGreeting=data[0].RecordFieldData;
@@ -456,12 +456,12 @@
         }).error(function(data) {
         })
 
-        $charge.commondata().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_GeneralAttributes","DecimalPointLength").success(function(data) {
+        $charge.settingsapp().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_GeneralAttributes","DecimalPointLength").success(function(data) {
             $scope.decimalPoint=parseInt(data[0].RecordFieldData);
             //
             //
         }).error(function(data) {
-            console.log(data);
+            //console.log(data);
         });
 
         $scope.isLoading = true;
@@ -483,7 +483,7 @@
 
             $charge.inventory().allheaders(skip1,take,'desc').success(function(data)
             {
-                console.log(data);
+                //console.log(data);
 
                 if($scope.loading1==true)
                 {
@@ -530,7 +530,7 @@
             {
                 $scope.listLoaded = true;
 				$scope.loading1 = false;
-				console.log(data);
+				//console.log(data);
                 $scope.isSpinnerShown=false;
                 grnDataEnds=true;
                 if(aodDataEnds){
@@ -541,7 +541,7 @@
 
             $charge.aod().allheaders(skip2,take,'desc').success(function(data)
             {
-                console.log(data);
+                //console.log(data);
 
                 if($scope.loading2==true)
                 {
@@ -586,7 +586,7 @@
 
             }).error(function(data)
             {
-                console.log(data);
+                //console.log(data);
                 $scope.isSpinnerShown=false;
                 aodDataEnds=true;
                 if(grnDataEnds){
@@ -620,7 +620,7 @@
                 var searchLength=length;
 
                 if (keyword.length == searchLength) {
-                    console.log(keyword);
+                    //console.log(keyword);
                     //
                     skipGRNSearch = 0;
                     takeGRNSearch = 50;
@@ -827,11 +827,22 @@
                             inventory_type : "Receipt"
                         });
                     }
-                    skipFilterListGRN += takeFilterListGRN;
-                    $scope.loadFilterPagingGRN(filterBy, value, skipFilterListGRN, takeFilterListGRN);
+
+                    if(data.length<takeFilterListGRN)
+                    {
+                      vm.inventories = filterList;
+                    }
+                    else
+                    {
+                      skipFilterListGRN += takeFilterListGRN;
+                      $scope.loadFilterPagingGRN(filterBy, value, skipFilterListGRN, takeFilterListGRN);
+                    }
                 }).error(function (data) {
-                    vm.inventories = [];
-                    vm.selectedInventory = null;
+                    if(filterList.length==0)
+                    {
+                      vm.inventories = [];
+                      vm.selectedInventory = null;
+                    }
                 });
 
                 $charge.aod().filter(filterBy, value, skipFilterListAOD, takeFilterListAOD, 'desc').success(function (data) {
@@ -854,11 +865,22 @@
                             inventory_type : "Issue"
                         });
                     }
-                    skipFilterListAOD += takeFilterListAOD;
-                    $scope.loadFilterPagingAOD(filterBy, value, skipFilterListAOD, takeFilterListAOD);
+
+                    if(data.length<takeFilterListAOD)
+                    {
+                      vm.inventories = filterList;
+                    }
+                    else
+                    {
+                      skipFilterListAOD += takeFilterListAOD;
+                      $scope.loadFilterPagingAOD(filterBy, value, skipFilterListAOD, takeFilterListAOD);
+                    }
                 }).error(function (data) {
-                    vm.inventories = [];
-                    vm.selectedInventory = null;
+                    if(filterList.length==0)
+                    {
+                      vm.inventories = [];
+                      vm.selectedInventory = null;
+                    }
                 });
             }
 
@@ -885,8 +907,16 @@
                         inventory_type : "Receipt"
                     });
                 }
-                skip += take;
-                $scope.loadFilterPagingGRN(filterBy, value, skip, take);
+
+                if(data.length<take)
+                {
+                  vm.inventories = filterList;
+                }
+                else
+                {
+                  skip += take;
+                  $scope.loadFilterPagingGRN(filterBy, value, skip, take);
+                }
             }).error(function (data) {
                 if(filterList.length>0) {
                     vm.inventories = filterList;
@@ -921,8 +951,16 @@
                         inventory_type : "Issue"
                     });
                 }
-                skip += take;
-                $scope.loadFilterPagingAOD(filterBy, value, skip, take);
+
+                if(data.length<take)
+                {
+                  vm.inventories = filterList;
+                }
+                else
+                {
+                  skip += take;
+                  $scope.loadFilterPagingAOD(filterBy, value, skip, take);
+                }
             }).error(function (data) {
                 if(filterList.length>0) {
                     vm.inventories = filterList;
@@ -1263,7 +1301,7 @@
             $scope.waitForSearchMoreKeywordDeal=keyword;
             if(!$scope.searchMreDeal) {
                 //
-                if ($scope.profilelistcustomer.length >= 100) {
+                if ($scope.profilelistdealer.length >= 100) {
                     if (keyword != undefined) {
                         if (keyword.length == 3) {
                             vm.isAutoDisabledDeal = true;
@@ -1377,18 +1415,18 @@
                             });
                         }
                         else if (keyword.length == 0 || keyword == null) {
-                            $scope.filteredUsersDeal = $scope.profilelistcustomer;
+                            $scope.filteredUsersDeal = $scope.profilelistdealer;
                             $scope.searchMreDeal = false;
                         }
                     }
                     else if (keyword == undefined) {
-                        $scope.filteredUsersDeal = $scope.profilelistcustomer;
+                        $scope.filteredUsersDeal = $scope.profilelistdealer;
                         $scope.searchMreDeal = false;
                     }
                 }
             }
             else if (keyword == undefined || keyword.length == 0) {
-                $scope.filteredUsersDeal = $scope.profilelistcustomer;
+                $scope.filteredUsersDeal = $scope.profilelistdealer;
                 $scope.searchMreDeal = false;
             }
         }
@@ -1442,7 +1480,7 @@
                 var grnid=item.grnNo;
                 $charge.inventory().getHeaderByID(grnid).success(function(data)
                 {
-                    console.log(data);
+                    //console.log(data);
                     for(var i=0;i<data.length;i++)
                     {
                         rowproducts.push({
@@ -1456,7 +1494,7 @@
 
                 }).error(function(data)
                 {
-                    console.log(data);
+                    //console.log(data);
                 })
             }
             else if(item.inventory_type=='Issue')
@@ -1464,7 +1502,7 @@
                 var aodid=item.aodNo;
                 $charge.aod().getHeaderByID(aodid).success(function(data)
                 {
-                    console.log(data);
+                    //console.log(data);
                     for(var i=0;i<data.length;i++)
                     {
                         rowproducts.push({
@@ -1477,7 +1515,7 @@
                     item.rowproducts=rowproducts;
                 }).error(function(data)
                 {
-                    console.log(data);
+                    //console.log(data);
                 })
             }
             $scope.selectedprofile = item;
@@ -1499,59 +1537,54 @@
 
         }
 
-        $scope.cancelorder = function (editedprofile) {
-            $scope.editOff = true;
+        $scope.cancelorder = function (ev,editedprofile) {
 
-            if(editedprofile.inventory_type == "Receipt")
-            {
+            var confirm = $mdDialog.confirm()
+              .title('Are you sure you want to cancel this order?')
+              .textContent('You cannot revert this order once you cancel it!')
+              .ariaLabel('Lucky day')
+              .targetEvent(ev)
+              .ok('Yes')
+              .cancel('No');
+
+            $mdDialog.show(confirm).then(function () {
+              $scope.editOff = true;
+
+              if(editedprofile.inventory_type == "Receipt")
+              {
                 //var updatedinventoryobject = editedprofile;
                 $charge.inventory().cancel(editedprofile.grnNo).success(function(data){
-                    console.log(data);
+                  //console.log(data);
+                  notifications.toast("Order has been cancelled!","success");
 
-                    $mdToast.show({
-                        template: '<md-toast class="md-toast-success" >Order has been cancelled!</md-toast>',
-                        hideDelay: 2000,
-                        position: 'bottom right'
-                    });
-
-                    //$scope.reloadpage();
-                    $scope.refreshlist();
-                    closeReadPane();
+                  //$scope.reloadpage();
+                  $scope.refreshlist();
+                  closeReadPane();
 
                 }).error(function(data){
-                    console.log(data);
-                    $mdToast.show({
-                        template: '<md-toast class="md-toast-success" >Order cancel failed!</md-toast>',
-                        hideDelay: 2000,
-                        position: 'bottom right'
-                    });
+                  //console.log(data);
+                  notifications.toast("Order cancel failed!","error");
                 })
-            }
-            else if(editedprofile.inventory_type == "Issue")
-            {
+              }
+              else if(editedprofile.inventory_type == "Issue")
+              {
                 //var updatedaodobject = editedprofile;
                 $charge.aod().cancel(editedprofile.aodNo).success(function(data){
-                    console.log(data);
+                  //console.log(data);
+                  notifications.toast("Order has been cancelled!","success");
 
-                    $mdToast.show({
-                        template: '<md-toast class="md-toast-success" >Order has been cancelled!</md-toast>',
-                        hideDelay: 2000,
-                        position: 'bottom right'
-                    });
-
-                    //$scope.reloadpage();
-                    $scope.refreshlist();
-                    closeReadPane();
+                  //$scope.reloadpage();
+                  $scope.refreshlist();
+                  closeReadPane();
 
                 }).error(function(data){
-                    console.log(data);
-                    $mdToast.show({
-                        template: '<md-toast class="md-toast-success" >Order cancel failed!</md-toast>',
-                        hideDelay: 2000,
-                        position: 'bottom right'
-                    });
+                  //console.log(data);
+                  notifications.toast("Order cancel failed!","error");
                 })
-            }
+              }
+            }, function () {
+
+            });
 
         }
 
@@ -1613,7 +1646,7 @@
                     }
                 }
             }
-            else if(category=='Customer')
+            else if(category=='Dealer')
             {
                 if($scope.filteredUsersDeal!=""&&$scope.filteredUsersDeal!=undefined)
                 {
@@ -1789,7 +1822,7 @@
 
         $scope.profilelist = [];
         $scope.profilelistsupplier = [];
-        $scope.profilelistcustomer = [];
+        $scope.profilelistdealer = [];
 
         var skipprofiles=0;
         var takeprofiles=100;
@@ -1880,26 +1913,28 @@
             //    //alert ("Error getting all banks");
             //});
 
-          var data={
-            "url": "https://cloudcharge.search.windows.net/indexes/profiles/docs/search?api-version=2016-09-01",
-            "searchBy": "*",
-            "searchFields": "",
-            "take":takeprofilessuppliers,
-            "skip":skipprofilessuppliers,
-            "orderby" : "createddate desc"
-          }
+          //var data={
+          //  "url": "https://cloudchargesearch.search.windows.net/indexes/profiles/docs/search?api-version=2016-09-01",
+          //  "searchBy": "*",
+          //  "searchFields": "",
+          //  "take":takeprofilessuppliers,
+          //  "skip":skipprofilessuppliers,
+          //  "orderby" : "createddate desc",
+          //  "status" : "category eq 'Supplier'"
+          //}
 
           var loading=true;
 
-          $charge.searchhelper().searchRequest(data).success(function(data)
-          {
-            //console.log(data);
-            if(loading)
-            {
-              //
+          //$charge.searchhelper().searchRequest(data).success(function(data)
+
+          $azureSearchHandle.getClient().SearchRequest("profile", skipprofilessuppliers, takeprofilessuppliers, 'desc', "category eq 'Supplier'").onComplete(function (Response) {
+            if (loading) {
               skipprofilessuppliers+=takeprofilessuppliers;
-              for (var i = 0; i < data.value.length; i++) {
-                var obj=data.value[i];
+              //
+
+              for (var i = 0; i < Response.length; i++) {
+                //
+                var obj=Response[i];
 
                 $scope.profilelistsupplier.push({
                   profilename : obj.first_name,
@@ -1912,18 +1947,19 @@
 
               $scope.filteredUsersSupp=$scope.profilelistsupplier;
 
-              $scope.profilelistcustomer=$scope.profilelistsupplier;
-              $scope.filteredUsersDeal=$scope.profilelistcustomer;
-
+              //$scope.profilelistdealer=$scope.profilelistsupplier;
+              //$scope.filteredUsersDeal=$scope.profilelistdealer;
             }
-          }).error(function(data)
-          {
+
+          }).onError(function (data) {
+            //console.log(data);
             loading = false;
-          })
+          });
+
         }
         loadAllSuppliers();
 
-        function loadAllCustomers() {
+        function loadAllDealers() {
             //
             //$charge.profile().getprofilesbycategory('Dealer',skipprofilescustomers,takeprofilescustomers,'asc').success(function(data){
             //    //console.log(data);
@@ -1934,7 +1970,7 @@
             //
             //        if(obj.profile_type=='Business')
             //        {
-            //            $scope.profilelistcustomer.push({
+            //            $scope.profilelistdealer.push({
             //                profilename : obj.business_name,
             //                profileId : obj.profileId,
             //                othername : obj.business_contact_name,
@@ -1943,7 +1979,7 @@
             //        }
             //        else if(obj.profile_type=='Individual')
             //        {
-            //            $scope.profilelistcustomer.push({
+            //            $scope.profilelistdealer.push({
             //                profilename : obj.first_name,
             //                profileId : obj.profileId,
             //                othername : obj.last_name,
@@ -1953,8 +1989,8 @@
             //
             //    }
             //
-            //    $scope.filteredUsersDeal=$scope.profilelistcustomer;
-            //    //loadAllCustomers();
+            //    $scope.filteredUsersDeal=$scope.profilelistdealer;
+            //    //loadAllDealers();
             //
             //    //for (i = 0, len = data.length; i<len; ++i){
             //    //    $scope.allBanks.push ({display: data[i].BankName, value:{TenantID:data[i].TenantID, value:data[i].BankName.toLowerCase()}});
@@ -1964,28 +2000,30 @@
             //    //alert ("Error getting all banks");
             //});
 
-          var data={
-            "url": "https://cloudchargesearch.search.windows.net/indexes/profiles/docs/search?api-version=2016-09-01",
-            "searchBy": "*",
-            "searchFields": "",
-            "take":takeprofilescustomers,
-            "skip":skipprofilescustomers,
-            "orderby" : "createddate desc"
-          }
+          //var data={
+          //  "url": "https://cloudchargesearch.search.windows.net/indexes/profiles/docs/search?api-version=2016-09-01",
+          //  "searchBy": "*",
+          //  "searchFields": "",
+          //  "take":takeprofilescustomers,
+          //  "skip":skipprofilescustomers,
+          //  "orderby" : "createddate desc",
+          //  "status" : "category eq 'Dealer'"
+          //}
 
           var loading=true;
 
-          $charge.searchhelper().searchRequest(data).success(function(data)
-          {
-            //console.log(data);
-            if(loading)
-            {
-              //
-              skipprofilescustomers+=takeprofilescustomers;
-              for (var i = 0; i < data.value.length; i++) {
-                var obj=data.value[i];
+          //$charge.searchhelper().searchRequest(data).success(function(data)
 
-                $scope.profilelistcustomer.push({
+          $azureSearchHandle.getClient().SearchRequest("profile", skipprofilescustomers, takeprofilescustomers, 'desc', "category eq 'Dealer'").onComplete(function (Response) {
+            if (loading) {
+              skipprofilescustomers+=takeprofilescustomers;
+              //
+
+              for (var i = 0; i < Response.length; i++) {
+                //
+                var obj=Response[i];
+
+                $scope.profilelistdealer.push({
                   profilename : obj.first_name,
                   profileId : obj.profileId,
                   othername : obj.last_name,
@@ -1994,18 +2032,18 @@
 
               }
 
-              $scope.filteredUsersDeal=$scope.profilelistcustomer;
+              $scope.filteredUsersDeal=$scope.profilelistdealer;
 
-              $scope.profilelistsupplier=$scope.profilelistcustomer;
-              $scope.filteredUsersSupp=$scope.profilelistsupplier;
-
+              //$scope.profilelistsupplier=$scope.profilelistdealer;
+              //$scope.filteredUsersSupp=$scope.profilelistsupplier;
             }
-          }).error(function(data)
-          {
+
+          }).onError(function (data) {
             loading = false;
-          })
+          });
+
         }
-        //loadAllCustomers();
+        loadAllDealers();
 
 
         $productHandler.getClient().TrackInventoryProductScroll(0,10).onComplete(function(data)
@@ -2105,11 +2143,7 @@
             }
             else if($scope.rows.length==0)
             {
-                $mdToast.show({
-                    template: '<md-toast class="md-toast-error" >Please add products using add new button to create GRN/AOD</md-toast>',
-                    hideDelay: 2000,
-                    position: 'top right'
-                });
+                notifications.toast("Please add products using add new button to create GRN/AOD","error");
                 $scope.submitted=false;
             }
 
@@ -2156,10 +2190,10 @@
 
                     $scope.content.supplier=selecteduser.profilename;
                     $scope.content.supplierID=selecteduser.profileId;
-                    //$scope.content.receivedStore=selectedstore.storename;
-                    //$scope.content.receivedStoreID=selectedstore.storeId;
-                    $scope.content.receivedStore=selectedstore;
-                    $scope.content.receivedStoreID="Default001";
+                    $scope.content.receivedStore=selectedstore.storename;
+                    $scope.content.receivedStoreID=selectedstore.storeId;
+                    //$scope.content.receivedStore=selectedstore;
+                    //$scope.content.receivedStoreID="Default001";
                     $scope.content.receivedDate=moment($scope.content.receivedDate).format('YYYY-MM-DD HH:MM:SS');
                     $scope.content.guTranID="11";
                     //$scope.content.issuedStore="";
@@ -2184,9 +2218,8 @@
                     //console.log(inventoryobject);
                     $charge.inventory().store(inventoryobject).success(function(data){
                         //console.log(data);
-						debugger;
                         $scope.submitted=false;
-                        notifications.toast("Successfully added to Inventory with ID: "+data.id,"success");
+                        notifications.toast("Successfully added to Inventory","success");
                         //$mdToast.show({
                         //	template: '<md-toast class="md-toast-success" >Successfully added to Inventory!</md-toast>',
                         //	hideDelay: 2000,
@@ -2255,11 +2288,7 @@
             }
             else if($scope.rowsissue.length==0)
             {
-                $mdToast.show({
-                    template: '<md-toast class="md-toast-error" >Please add products by add new button to create GRN/AOD</md-toast>',
-                    hideDelay: 2000,
-                    position: 'top right'
-                });
+                notifications.toast("Please add products by add new button to create GRN/AOD","error");
                 $scope.submitted=false;
             }
 
@@ -2305,8 +2334,8 @@
 
                     $scope.aodcontent.customer=selecteduser.profilename;
                     $scope.aodcontent.guCustomerID=selecteduser.profileId;
-                    $scope.aodcontent.issuedStore=selectedstore;
-                    $scope.aodcontent.issuedStoreID="Default001";
+                    $scope.aodcontent.issuedStore=selectedstore.storename;
+                    $scope.aodcontent.issuedStoreID=selectedstore.storeId;
                     $scope.aodcontent.createdUser="admin";
                     $scope.aodcontent.createdDate=currentdate;
                     $scope.aodcontent.guTranID="11";
@@ -2327,7 +2356,7 @@
                     $charge.aod().store(aodobject).success(function(data){
                         //console.log(data);
                         $scope.submitted=false;
-                        notifications.toast("Successfully added to Inventory with ID: "+data.id,"success");
+                        notifications.toast("Successfully added to Inventory","success");
 
                         //$mdToast.show({
                         //    template: '<md-toast class="md-toast-success" >Successfully added to Inventory!</md-toast>',
@@ -2574,18 +2603,14 @@
             if(product!=null&&product!="")
             {
                 $scope.submitted=true;
-                $charge.stock().getStock(product.productId).success(function (data) {
+                $charge.stock().getStock(product.guproductID).success(function (data) {
 
                     var prodqty=parseInt(data.qty);
                     var selectedqty=parseInt(qty);
 
                     if(prodqty<selectedqty)
                     {
-                        $mdToast.show({
-                            template: '<md-toast class="md-toast-error" >Stock Quantity is less than the entered Quantity!</md-toast>',
-                            hideDelay: 2000,
-                            position: 'bottom right'
-                        });
+                        notifications.toast("Stock quantity is less than the entered quantity!", "error");
                         //qty='';
                         rowname[index].qty='';
                     }
@@ -2651,7 +2676,7 @@
                     {
                         if(user.profile_type=='Business')
                         {
-                            $scope.profilelistcustomer.push({
+                            $scope.profilelistdealer.push({
                                 profilename : user.business_name,
                                 profileId : user.profileId,
                                 othername : user.business_contact_name,
@@ -2661,7 +2686,7 @@
                         }
                         else if(user.profile_type=='Individual')
                         {
-                            $scope.profilelistcustomer.push({
+                            $scope.profilelistdealer.push({
                                 profilename : user.first_name,
                                 profileId : user.profileId,
                                 othername : user.first_name,
@@ -2669,7 +2694,7 @@
                             });
                             self.searchText2=user.first_name;
                         }
-                        $scope.filteredUsersDeal=$scope.profilelistcustomer;
+                        $scope.filteredUsersDeal=$scope.profilelistdealer;
                     }
                 })
 
@@ -2731,7 +2756,7 @@
             }
         }
 
-        $scope.addStore = function(ev)
+        $scope.addStore = function(ev,store)
         {
             //
             $scope.store_details.receivedStore = "";
@@ -2750,7 +2775,7 @@
             $mdDialog.show({
                 controller: InventoryController,
                 templateUrl: 'app/main/inventory/dialogs/prompt-dialog-store.html',
-                parent: angular.element(document.body),
+                parent: angular.element($document.body),
                 targetEvent: ev,
                 clickOutsideToClose:false
             })
@@ -2759,6 +2784,10 @@
                         storename:result,
                         storeId:rowid
                     });
+                    $scope.store_details.receivedStore = {
+                      storename:result,
+                      storeId:rowid
+                    };
                 }, function() {
                     $scope.newStore=false;
                 });
@@ -2808,9 +2837,9 @@
                                 "RecordName": "CTS_InventoryAttributes",
                                 "FieldName": "Store",
                                 "RecordFieldData": storeval
-                            }
+                            };
 
-                            $charge.commondata().insertDuoBaseValuesAddition(req).success(function (data) {
+                            $charge.settingsapp().insertDuoBaseValuesAddition(req).success(function (data) {
                                 //console.log(data);
                                 if (data.error == "00000") {
                                     //$scope.storeslist.push({
@@ -2823,7 +2852,7 @@
                                     $mdDialog.hide(storeval, data.RowID);
                                 }
                             }).error(function (data) {
-                                console.log(data);
+                                //console.log(data);
                                 $scope.newStore = false;
                                 $scope.isAddStoreClicked = false;
                                 $mdDialog.hide();
@@ -2871,7 +2900,7 @@
                                 ]
                             }
 
-                            $charge.commondata().store(req).success(function (data) {
+                            $charge.settingsapp().store(req).success(function (data) {
                                 $rootScope.isStoreLoaded = true;
                                 if (data[0].error == "00000") {
                                     //$scope.storeslist.push({
@@ -2884,7 +2913,7 @@
                                     $mdDialog.hide(storeval, data.RowID);
                                 }
                             }).error(function (data) {
-                                console.log(data);
+                                //console.log(data);
                                 $scope.newStore = false;
                                 $scope.isAddStoreClicked = false;
                                 $mdDialog.hide();
@@ -2935,7 +2964,7 @@
                         ]
                     }
 
-                    $charge.commondata().store(req).success(function (data) {
+                    $charge.settingsapp().store(req).success(function (data) {
                         $rootScope.isStoreLoaded = true;
                         if (data[0].error == "00000") {
                             //$scope.storeslist.push({
@@ -2948,7 +2977,7 @@
                             $mdDialog.hide(storeval, data.RowID);
                         }
                     }).error(function (data) {
-                        console.log(data);
+                        //console.log(data);
                         $scope.newStore = false;
                         $scope.isAddStoreClicked = false;
                         $mdDialog.hide();

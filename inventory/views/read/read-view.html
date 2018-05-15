@@ -211,7 +211,7 @@
                                      md-items="item in vm.querySearch(vm.searchText1,'Supplier')"
                                      md-search-text-change="loadProfileByKeywordSupp(vm.searchText1,'Supplier')"
                                      md-item-text="item.profilename"
-                                     md-floating-label="Name"
+                                     md-floating-label="Supplier"
                                      md-min-length=""
                                      autocomplete-validator>
                         <md-item-template>
@@ -232,12 +232,12 @@
                     <md-input-container flex>
                         <label>Received store</label>
                         <md-select ng-required="true" name="receivedStore" ng-model="store_details.receivedStore" required>
-                            <!--<md-option ng-repeat="store in storeslist" ng-value="store">{{store.storename}}</md-option>-->
-                            <md-option value="defaultStore">Default store</md-option>
+                            <md-option ng-repeat="store in storeslist" ng-value="store">{{store.storename}}</md-option>
+                            <!--<md-option value="defaultStore">Default store</md-option>-->
                         </md-select>
                     </md-input-container>
                     <md-input-container>
-                        <md-button ng-click="addStore($event)" class="md-icon-button md-accent"><md-icon md-font-icon="icon-plus-circle"></md-icon><md-tooltip>Add new</md-tooltip> </md-button>
+                        <md-button ng-click="addStore($event,store_details.receivedStore)" class="md-icon-button md-accent"><md-icon md-font-icon="icon-plus-circle"></md-icon><md-tooltip>Add new</md-tooltip> </md-button>
                     </md-input-container>
                 </div>
 
@@ -424,7 +424,7 @@
                                      md-no-cache="vm.noCache"
                                      md-selected-item="customer_supplier.customer"
                                      md-search-text="vm.searchText2"
-                                     md-items="item in vm.querySearch(vm.searchText2,'Customer')"
+                                     md-items="item in vm.querySearch(vm.searchText2,'Dealer')"
                                      md-search-text-change="loadProfileByKeywordDeal(vm.searchText2,'Dealer')"
                                      md-item-text="item.profilename"
                                      md-floating-label="Dealer"
@@ -448,12 +448,12 @@
                     <md-input-container flex>
                         <label>Issued Store</label>
                         <md-select ng-required="true" name="issuedStore" ng-model="store_details.issuedStore" required>
-                            <!--<md-option ng-repeat="store in storeslist" ng-value="store">{{store.storename}}</md-option>-->
-                            <md-option ng-value="defaultStore">Default Store</md-option>
+                            <md-option ng-repeat="store in storeslist" ng-value="store">{{store.storename}}</md-option>
+                            <!--<md-option ng-value="defaultStore">Default Store</md-option>-->
                         </md-select>
                     </md-input-container>
                     <md-input-container>
-                        <md-button ng-click="addStore($event)" class="md-icon-button md-accent"><md-icon md-font-icon="icon-plus-circle"></md-icon><md-tooltip>Add new</md-tooltip> </md-button>
+                        <md-button ng-click="addStore($event,store_details.issuedStore)" class="md-icon-button md-accent"><md-icon md-font-icon="icon-plus-circle"></md-icon><md-tooltip>Add new</md-tooltip> </md-button>
                     </md-input-container>
                 </div>
 
