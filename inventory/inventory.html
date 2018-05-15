@@ -148,7 +148,7 @@
 
                             <md-menu-content width="3">
                                 <md-menu-item>
-                                    <md-button aria-label="Delete" ng-disabled="vm.selectedInventory.status=='Cancelled'" ng-click="cancelorder(vm.selectedInventory);">
+                                    <md-button aria-label="Delete" ng-disabled="vm.selectedInventory.status=='Cancelled'" ng-click="cancelorder($event,vm.selectedInventory);">
                                         <md-icon md-font-icon="icon-format-clear"></md-icon>
                                         <span>Cancel GRN/AOD</span>
                                     </md-button>
