@@ -2313,8 +2313,8 @@
                     {
                         aoditems.push({
                             productCode : productObj.code,
-                            guProductID : productObj.productId,
-                            productRefID : productObj.guproductid,
+                            guProductID : productObj.guproductID,
+                            productRefID : productObj.guproductID,
                             quantity : qty,
                             productPrice : productObj.price_of_unit
                         });
@@ -2605,7 +2605,7 @@
                 $scope.submitted=true;
                 $charge.stock().getStock(product.guproductID).success(function (data) {
 
-                    var prodqty=parseInt(data.qty);
+                    var prodqty=parseInt(data.qty)-parseInt(product.minimum_stock_level);
                     var selectedqty=parseInt(qty);
 
                     if(prodqty<selectedqty)
