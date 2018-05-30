@@ -138,7 +138,7 @@
             </div>
             <div flex class="inpage-readpane" layout="column" md-whiteframe="4dp" ng-if="showInpageReadpane">
                 <div layout="row" layout-align="space-between center" class="inpage-readpane-toolbar">
-                    <h3 class="group-sub-head" layout="row" layout-align="start center">Plan Info</h3>
+                    <h3 class="group-sub-head" layout="row" layout-align="start center">{{vm.selectedInventory.inventory_type}} Info</h3>
                     <div layout="row">
                         <md-menu>
                             <md-button aria-label="More" class="md-icon-button" ng-click="$mdOpenMenu($event)">
