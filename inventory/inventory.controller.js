@@ -2629,76 +2629,142 @@
 
         }
 
-        $scope.addNewUser = function(ev, userCategory)
+        $scope.addNewUser = function(ev,userCategory)
         {
-            //console.log("yes");
-            //$scope.content.user = "";
-            $mdDialog.show({
-                controller: 'AddInventoryController',
-                templateUrl: 'app/main/inventory/dialogs/compose/compose-dialog.html',
-                controllerAs       : 'vm',
-                locals             : {
-                    selectedMail: undefined,
-                    category: userCategory
-                },
-                parent: angular.element($document.body),
-                targetEvent: ev,
-                clickOutsideToClose:true
-            })
-                .then(function(user) {
+          //console.log("yes");
+          //$scope.content.user = "";
+          $mdDialog.show({
+            controller: 'AddNewInventoryUserController',
+            templateUrl: 'app/main/inventory/composeNewUser-dialog.html',
+            controllerAs       : 'vm',
+            locals             : {
+              selectedMail: undefined,
+              category: userCategory
+            },
+            parent: angular.element($document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true
+          })
+            .then(function(user) {
+              if(user != undefined)
+              {
+                var userObj={
+                  profilename : user.first_name,
+                  profileId : user.profileId,
+                  othername : user.last_name,
+                  profile_type : user.profile_type
+                };
 
-                    //$scope.profilelist.push(user);
-                    if(user.category=='Supplier')
-                    {
-                        if(user.profile_type=='Business')
-                        {
-                            $scope.profilelistsupplier.push({
-                                profilename : user.business_name,
-                                profileId : user.profileId,
-                                othername : user.business_contact_name,
-                                profile_type : user.profile_type
-                            });
-                            self.searchText1=user.business_name;
-                        }
-                        else if(user.profile_type=='Individual')
-                        {
-                            $scope.profilelistsupplier.push({
-                                profilename : user.first_name,
-                                profileId : user.profileId,
-                                othername : user.first_name,
-                                profile_type : user.profile_type
-                            });
-                            self.searchText1=user.first_name;
-                        }
-                        $scope.filteredUsersSupp=$scope.profilelistsupplier;
-                    }
-                    else if(user.category=='Dealer')
-                    {
-                        if(user.profile_type=='Business')
-                        {
-                            $scope.profilelistdealer.push({
-                                profilename : user.business_name,
-                                profileId : user.profileId,
-                                othername : user.business_contact_name,
-                                profile_type : user.profile_type
-                            });
-                            self.searchText2=user.business_name;
-                        }
-                        else if(user.profile_type=='Individual')
-                        {
-                            $scope.profilelistdealer.push({
-                                profilename : user.first_name,
-                                profileId : user.profileId,
-                                othername : user.first_name,
-                                profile_type : user.profile_type
-                            });
-                            self.searchText2=user.first_name;
-                        }
-                        $scope.filteredUsersDeal=$scope.profilelistdealer;
-                    }
-                })
+                if(user.category=='Supplier')
+                {
+                  $scope.profilelistsupplier.push(userObj);
+                  self.searchText1=user.first_name;
+                  $scope.filteredUsersSupp=$scope.profilelistsupplier;
+                  $scope.customer_supplier.supplier=userObj;
+                }
+                else if(user.category=='Dealer')
+                {
+                  $scope.profilelistdealer.push(userObj);
+                  self.searchText2=user.first_name;
+                  $scope.filteredUsersDeal=$scope.profilelistdealer;
+                  $scope.customer_supplier.customer=userObj;
+                }
+              }
+            })
+
+          //if(user.profile_type=='Business')
+          //{
+          //  $scope.profilelistsupplier.push({
+          //    profilename : user.business_name,
+          //    profileId : user.profileId,
+          //    othername : user.business_contact_name,
+          //    profile_type : user.profile_type
+          //  });
+          //  self.searchText1=user.business_name;
+          //}
+          //else if(user.profile_type=='Individual')
+          //{
+          //  $scope.profilelistsupplier.push({
+          //    profilename : user.first_name,
+          //    profileId : user.profileId,
+          //    othername : user.last_name,
+          //    profile_type : user.profile_type
+          //  });
+          //  self.searchText1=user.first_name;
+          //}
 
         }
+
+        //$scope.addNewUser = function(ev, userCategory)
+        //{
+        //    //console.log("yes");
+        //    //$scope.content.user = "";AddNewInventoryUserController
+        //    $mdDialog.show({
+        //        controller: 'AddInventoryController',
+        //        templateUrl: 'app/main/inventory/dialogs/compose/compose-dialog.html',
+        //        controllerAs       : 'vm',
+        //        locals             : {
+        //            selectedMail: undefined,
+        //            category: userCategory
+        //        },
+        //        parent: angular.element($document.body),
+        //        targetEvent: ev,
+        //        clickOutsideToClose:true
+        //    })
+        //        .then(function(user) {
+        //
+        //            //$scope.profilelist.push(user);
+        //            if(user.category=='Supplier')
+        //            {
+        //                if(user.profile_type=='Business')
+        //                {
+        //                    $scope.profilelistsupplier.push({
+        //                        profilename : user.business_name,
+        //                        profileId : user.profileId,
+        //                        othername : user.business_contact_name,
+        //                        profile_type : user.profile_type
+        //                    });
+        //                    self.searchText1=user.business_name;
+        //                }
+        //                else if(user.profile_type=='Individual')
+        //                {
+        //                    $scope.profilelistsupplier.push({
+        //                        profilename : user.first_name,
+        //                        profileId : user.profileId,
+        //                        othername : user.last_name,
+        //                        profile_type : user.profile_type
+        //                    });
+        //                    self.searchText1=user.first_name;
+        //                }
+        //                $scope.filteredUsersSupp=$scope.profilelistsupplier;
+        //            }
+        //            else if(user.category=='Dealer')
+        //            {
+        //                if(user.profile_type=='Business')
+        //                {
+        //                    $scope.profilelistdealer.push({
+        //                        profilename : user.business_name,
+        //                        profileId : user.profileId,
+        //                        othername : user.business_contact_name,
+        //                        profile_type : user.profile_type
+        //                    });
+        //                    self.searchText2=user.business_name;
+        //                }
+        //                else if(user.profile_type=='Individual')
+        //                {
+        //                    $scope.profilelistdealer.push({
+        //                        profilename : user.first_name,
+        //                        profileId : user.profileId,
+        //                        othername : user.last_name,
+        //                        profile_type : user.profile_type
+        //                    });
+        //                    self.searchText2=user.first_name;
+        //                }
+        //                $scope.filteredUsersDeal=$scope.profilelistdealer;
+        //            }
+        //        })
+        //
+        //}
 
         $scope.addNewProduct = function(ev)
         {
