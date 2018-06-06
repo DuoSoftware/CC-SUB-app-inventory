@@ -162,96 +162,99 @@
                     <div class="preloader animate-fade-in-out" ng-if="readLoading" style="top: 0;left: 0">
                         <md-progress-circular></md-progress-circular>
                     </div>
-                    <div style="width: 700px;min-height: 842px;position:relative;font-size: 14px;overflow: hidden;margin: 0 auto;" md-whiteframe="2dp">
-                        <div class="template-header" style="height: 100px;background: #05a3ec;background:linear-gradient(45deg, #05a3ec,#006696);color: #fff;padding: 10px;">
-                            <div class="left-content" style="width: 30%;float: left;">
-                                <div style="font-size: 30px;margin: 20px 0;">{{vm.selectedInventory.inventory_type.toUpperCase()}}</div>
-                            </div>
-                            <div class="right-content" style="width: 70%;float: right;">
-                                <div class="inner-left" style="width: 50%;float: left;">
-                                    <div style="margin: 5px 0;">{{companyPhone}}</div>
-                                    <div style="margin: 5px 0;">{{companyEmail}}</div>
-                                </div>
-                                <div class="inner-right" style="width: 50%;float: right">
-                                    <div>{{companyName}}</div>
-                                    <div>{{companyAddress}}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sub-header" style="padding: 10px;padding-top: 30px;overflow: hidden;">
-                            <div class="left-content" style="width: 55%;float: left;">
-                                <!--<div style="color: #aaa;margin-bottom: 5px">Billed to</div>-->
-                                <div style="margin-bottom: 5px"><b>{{vm.selectedInventory.UserName.toUpperCase()}}</b></div>
-                                <div style="margin-bottom: 5px"><b>{{vm.selectedInventory.UserAddress}}</b></div>
-                                <div style="margin-bottom: 5px"><b>{{vm.selectedInventory.UserContact}}</b></div>
-                                <div><b>{{vm.selectedInventory.UserEmail}}</b></div>
 
-                                <div class="inner-left" style="margin-bottom: 10px;margin-top: 20px;">
-                                    <div style="color: #aaa;margin-bottom: 2px">Inventory type</div>
-                                    <div><b>{{vm.selectedInventory.inventory_type}}</b></div>
-                                </div>
-                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">
-                                    <div style="color: #aaa;margin-bottom: 2px">Received store</div>
-                                    <div><b>{{vm.selectedInventory.receivedStore}}</b></div>
-                                </div>
-                            </div>
-                            <div class="right-content" style="width: 45%;float: right;">
-                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">
-                                    <div style="color: #aaa;margin-bottom: 2px">Store</div>
-                                    <div><b>{{vm.selectedInventory.issuedStore}}</b></div>
-                                </div>
-                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">
-                                    <div style="color: #aaa;margin-bottom: 2px">Issued date</div>
-                                    <div><b>{{vm.selectedInventory.issuedDate.substr(0,10)}}</b></div>
-                                </div>
-                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">
-                                    <div style="color: #aaa;margin-bottom: 2px">Received date</div>
-                                    <div><b>{{vm.selectedInventory.receivedDate.substr(0,10}}</b></div>
-                                </div>
-                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">
-                                    <div style="color: #aaa;margin-bottom: 2px">Supplier</div>
-                                    <div><b>{{vm.selectedInventory.supplier}}</b></div>
-                                </div>
-                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">
-                                    <div style="color: #aaa;margin-bottom: 2px">Customer</div>
-                                    <div><b>{{vm.selectedInventory.customer}}</b></div>
-                                </div>
-                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">
-                                    <div style="color: #aaa;margin-bottom: 2px">GRN/GIN</div>
-                                    <div><b>{{vm.selectedInventory.grnNo}}</b></div>
-                                </div>
-                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">
-                                    <div style="color: #aaa;margin-bottom: 2px">GRN/GIN</div>
-                                    <div><b>{{vm.selectedInventory.aodNo}}</b></div>
-                                </div>
-                                <div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">
-                                    <div style="color: #aaa;margin-bottom: 2px">Status</div>
-                                    <div><b>{{vm.selectedInventory.status}}</b></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list" style="padding: 10px">
-                            <div class="list-header" style="padding: 7px 5px;background: #eee;overflow: hidden;">
-                                <div style="color: #aaa;width: 50%;float: left;">
-                                    Product
-                                </div>
-                                <div style="color: #aaa;width: 50%;float: left;text-align: right">
-                                    Quantity
-                                </div>
-                            </div>
-                            <div class="list-item" style="border-bottom: solid 1px #eee;padding: 10px;overflow: hidden;" ng-repeat="detail in vm.selectedInventory.rowproducts">
-                                <div style="float: left;color: #aaa;width: 50%">{{detail.productCode}}</div>
-                                <div style="float: left;color: #aaa;width: 50%;text-align: right">{{detail.quantity}}</div>
-                            </div>
+                    <div id="print-content" md-whiteframe="1dp" style="width: 700px"></div>
 
-                        </div>
-                        <div class="template-footer" style="width: 100%;margin-top: 30px;padding: 10px;position:absolute;bottom: 0;">
-                            <div style="margin: 5px 0;font-size: 12px"><b>Notes</b></div>
-                            <div style="font-size: 12px;color: #aaa;padding-top: 5px;border-top: solid 1px #eee">
-                                {{vm.selectedInventory.note}}
-                            </div>
-                        </div>
-                    </div>
+                    <!--<div style="width: 700px;min-height: 842px;position:relative;font-size: 14px;overflow: hidden;margin: 0 auto;" md-whiteframe="2dp">-->
+                        <!--<div class="template-header" style="height: 100px;background: #05a3ec;background:linear-gradient(45deg, #05a3ec,#006696);color: #fff;padding: 10px;">-->
+                            <!--<div class="left-content" style="width: 30%;float: left;">-->
+                                <!--<div style="font-size: 30px;margin: 20px 0;">{{vm.selectedInventory.inventory_type.toUpperCase()}}</div>-->
+                            <!--</div>-->
+                            <!--<div class="right-content" style="width: 70%;float: right;">-->
+                                <!--<div class="inner-left" style="width: 50%;float: left;">-->
+                                    <!--<div style="margin: 5px 0;">{{companyPhone}}</div>-->
+                                    <!--<div style="margin: 5px 0;">{{companyEmail}}</div>-->
+                                <!--</div>-->
+                                <!--<div class="inner-right" style="width: 50%;float: right">-->
+                                    <!--<div>{{companyName}}</div>-->
+                                    <!--<div>{{companyAddress}}</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="sub-header" style="padding: 10px;padding-top: 30px;overflow: hidden;">-->
+                            <!--<div class="left-content" style="width: 55%;float: left;">-->
+                                <!--&lt;!&ndash;<div style="color: #aaa;margin-bottom: 5px">Billed to</div>&ndash;&gt;-->
+                                <!--<div style="margin-bottom: 5px"><b>{{vm.selectedInventory.UserName.toUpperCase()}}</b></div>-->
+                                <!--<div style="margin-bottom: 5px"><b>{{vm.selectedInventory.UserAddress}}</b></div>-->
+                                <!--<div style="margin-bottom: 5px"><b>{{vm.selectedInventory.UserContact}}</b></div>-->
+                                <!--<div><b>{{vm.selectedInventory.UserEmail}}</b></div>-->
+
+                                <!--<div class="inner-left" style="margin-bottom: 10px;margin-top: 20px;">-->
+                                    <!--<div style="color: #aaa;margin-bottom: 2px">Inventory type</div>-->
+                                    <!--<div><b>{{vm.selectedInventory.inventory_type}}</b></div>-->
+                                <!--</div>-->
+                                <!--<div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">-->
+                                    <!--<div style="color: #aaa;margin-bottom: 2px">Received store</div>-->
+                                    <!--<div><b>{{vm.selectedInventory.receivedStore}}</b></div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="right-content" style="width: 45%;float: right;">-->
+                                <!--<div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">-->
+                                    <!--<div style="color: #aaa;margin-bottom: 2px">Store</div>-->
+                                    <!--<div><b>{{vm.selectedInventory.issuedStore}}</b></div>-->
+                                <!--</div>-->
+                                <!--<div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">-->
+                                    <!--<div style="color: #aaa;margin-bottom: 2px">Issued date</div>-->
+                                    <!--<div><b>{{vm.selectedInventory.issuedDate.substr(0,10)}}</b></div>-->
+                                <!--</div>-->
+                                <!--<div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">-->
+                                    <!--<div style="color: #aaa;margin-bottom: 2px">Received date</div>-->
+                                    <!--<div><b>{{vm.selectedInventory.receivedDate.substr(0,10}}</b></div>-->
+                                <!--</div>-->
+                                <!--<div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">-->
+                                    <!--<div style="color: #aaa;margin-bottom: 2px">Supplier</div>-->
+                                    <!--<div><b>{{vm.selectedInventory.supplier}}</b></div>-->
+                                <!--</div>-->
+                                <!--<div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">-->
+                                    <!--<div style="color: #aaa;margin-bottom: 2px">Customer</div>-->
+                                    <!--<div><b>{{vm.selectedInventory.customer}}</b></div>-->
+                                <!--</div>-->
+                                <!--<div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">-->
+                                    <!--<div style="color: #aaa;margin-bottom: 2px">GRN/GIN</div>-->
+                                    <!--<div><b>{{vm.selectedInventory.grnNo}}</b></div>-->
+                                <!--</div>-->
+                                <!--<div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Issue'">-->
+                                    <!--<div style="color: #aaa;margin-bottom: 2px">GRN/GIN</div>-->
+                                    <!--<div><b>{{vm.selectedInventory.aodNo}}</b></div>-->
+                                <!--</div>-->
+                                <!--<div class="inner-left" style="margin-bottom: 10px" ng-if="vm.selectedInventory.inventory_type=='Receipt'">-->
+                                    <!--<div style="color: #aaa;margin-bottom: 2px">Status</div>-->
+                                    <!--<div><b>{{vm.selectedInventory.status}}</b></div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="list" style="padding: 10px">-->
+                            <!--<div class="list-header" style="padding: 7px 5px;background: #eee;overflow: hidden;">-->
+                                <!--<div style="color: #aaa;width: 50%;float: left;">-->
+                                    <!--Product-->
+                                <!--</div>-->
+                                <!--<div style="color: #aaa;width: 50%;float: left;text-align: right">-->
+                                    <!--Quantity-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="list-item" style="border-bottom: solid 1px #eee;padding: 10px;overflow: hidden;" ng-repeat="detail in vm.selectedInventory.rowproducts">-->
+                                <!--<div style="float: left;color: #aaa;width: 50%">{{detail.productCode}}</div>-->
+                                <!--<div style="float: left;color: #aaa;width: 50%;text-align: right">{{detail.quantity}}</div>-->
+                            <!--</div>-->
+
+                        <!--</div>-->
+                        <!--<div class="template-footer" style="width: 100%;margin-top: 30px;padding: 10px;position:absolute;bottom: 0;">-->
+                            <!--<div style="margin: 5px 0;font-size: 12px"><b>Notes</b></div>-->
+                            <!--<div style="font-size: 12px;color: #aaa;padding-top: 5px;border-top: solid 1px #eee">-->
+                                <!--{{vm.selectedInventory.note}}-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
                     <!--<div class="inv-outline" md-whiteframe="2dp" layout="column">-->
 
