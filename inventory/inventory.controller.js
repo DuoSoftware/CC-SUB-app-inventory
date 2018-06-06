@@ -120,6 +120,7 @@
 
             var rowproducts=[];
             $scope.readLoading = true;
+            $('#print-content').children().remove();
 
             if(inventory.inventory_type=='Receipt')
             {
