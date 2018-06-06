@@ -15,7 +15,7 @@
         .controller('InventoryController', InventoryController);
 
     /** @ngInject */ //$productHandler,
-    function InventoryController($scope, $document, $timeout, notifications, $mdToast, $mdDialog, $mdMedia, $mdSidenav, $charge, $productHandler, $azureSearchHandle, $filter, $rootScope)
+    function InventoryController($scope, $document, $timeout, notifications, $mdToast, $mdDialog, $mdMedia, $mdSidenav, $charge, $productHandler, $azureSearchHandle, $filter, $rootScope, transactionTemplateGenerator)
     {
         var vm = this;
 
@@ -77,6 +77,44 @@
          *
          * @param product
          */
+
+        $scope.extractRead = function (products) {
+            var docinfo = {
+                type : 'inventory',
+                company : {
+                    companyName : $scope.companyName,
+                    companyPhone : $scope.companyPhone,
+                    companyEmail : $scope.companyEmail,
+                    companyAddress : $scope.companyAddress,
+                    companyLogo : $scope.companyLogo
+                },
+                client : {
+                    clientName : vm.selectedInventory.UserName,
+                    clientPhone : vm.selectedInventory.UserContact,
+                    clientAddress : vm.selectedInventory.UserAddress,
+                    clientEmail : vm.selectedInventory.UserEmail
+                },
+                transaction : {
+                    inventory_type : vm.selectedInventory.inventory_type,
+                    receivedStore : vm.selectedInventory.receivedStore,
+                    issuedStore : vm.selectedInventory.issuedStore,
+                    issuedDate : new Date(vm.selectedInventory.issuedDate),
+                    receivedDate : new Date(vm.selectedInventory.receivedDate),
+                    supplier : vm.selectedInventory.supplier,
+                    customer : vm.selectedInventory.customer,
+                    grnNo : vm.selectedInventory.grnNo,
+                    aodNo : vm.selectedInventory.aodNo,
+                    status : vm.selectedInventory.status,
+                    invoiceDetails : products
+                }
+            };
+            var t = transactionTemplateGenerator(docinfo);
+            var preview = $('#print-content');
+            preview.children().remove();
+            preview.append(t);
+            $scope.readLoading = false;
+        };
+
         function selectInventory(inventory)
         {
 
@@ -89,7 +127,9 @@
 				$scope.activeInventory = grnid;
                 $charge.inventory().getHeaderByID(grnid).success(function(data)
                 {
-                    //console.log(data);
+                    //Temp array to hold product details for template factory
+                    var tempProducts = [];
+                    //. . . . . . . . . .
                     for(var i=0;i<data.length;i++)
                     {
                         rowproducts.push({
@@ -97,6 +137,13 @@
                             productCode: data[i].productCode,
                             productPrice: data[i].productPrice,
                             quantity: data[i].quantity
+                        });
+                        tempProducts.push({
+                            name : data[i].productCode,
+                            unitPrice : ".",
+                            gty : ".",
+                            promotion : ".",
+                            totalPrice : data[i].quantity
                         });
                     }
                     inventory.rowproducts=rowproducts;
@@ -117,7 +164,7 @@
                         inventory.UserEmail=data[0].email_addr;
                     }
                     vm.selectedInventory = inventory;
-					$scope.readLoading = false;
+                    $scope.extractRead(tempProducts);
 
 				}).error(function(data)
                 {
@@ -131,7 +178,9 @@
 				$scope.activeInventory = aodid;
 				$charge.aod().getHeaderByID(aodid).success(function(data)
                 {
-                    //console.log(data);
+                    //Temp array to hold product details for template factory
+                    var tempProducts = [];
+                    //. . . . . . . . . .
                     for(var i=0;i<data.length;i++)
                     {
                         rowproducts.push({
@@ -139,6 +188,13 @@
                             productCode: data[i].productCode,
                             productPrice: data[i].productPrice,
                             quantity: data[i].quantity
+                        });
+                        tempProducts.push({
+                            name : data[i].productCode,
+                            unitPrice : ".",
+                            gty : ".",
+                            promotion : ".",
+                            totalPrice : data[i].quantity
                         });
                     }
                     inventory.rowproducts=rowproducts;
@@ -159,7 +215,7 @@
                         inventory.UserEmail=data[0].email_addr;
                     }
                     vm.selectedInventory = inventory;
-					$scope.readLoading = false;
+                    $scope.extractRead(tempProducts);
 				}).error(function(data)
                 {
                     //console.log(data);
