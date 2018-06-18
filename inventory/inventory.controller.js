@@ -350,6 +350,14 @@
             if(vm.activeInvoicePaneIndex == 0){
                 vm.activeInvoicePaneIndex = 1;
                 $scope.showInpageReadpane = false;
+                //if($scope.inventory_type == 'Receipt'){
+                //  $scope.storeslist = [];
+                //  $scope.storeslist = $scope.storeslistCompany;
+                //}
+                //else{
+                //  $scope.storeslist = [];
+                //  $scope.storeslist = $scope.storeslistDealer;
+                //}
             }else{
                 if(vm.editForm != undefined && vm.editForm.$dirty && state != 'submitTrigger' ){
                     var confirm = $mdDialog.confirm()
@@ -474,8 +482,11 @@
         $scope.profilelist = [];
         $scope.productlist = [];
         $scope.storeslist = [];
+        $scope.storeslistSelectedUser = [];
+        //$scope.storeslistCompany = [];
+        //$scope.storeslistDealer = [];
 
-        $charge.settingsapp().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_InventoryAttributes","Store").success(function(data)
+        $charge.stock().getAllStores().success(function(data)
         {
             //console.log(data);
             $rootScope.isStoreLoaded = true;
@@ -483,15 +494,49 @@
             for(var i=0;i<data.length;i++) {
                 var obj = data[i];
 
-                $scope.storeslist.push({
-                    storename: obj.RecordFieldData,
-                    storeId: obj.RowID
-                });
+                $scope.storeslist.push(obj);
+                //$scope.storeslist.push({
+                //  storename: obj.RecordFieldData,
+                //  storeId: obj.RowID
+                //});
             }
         }).error(function(data) {
             //console.log(data);
             $rootScope.isStoreLoaded = false;
         })
+
+        //$charge.stock().getStoresByType("Dealer").success(function(data)
+        //{
+        //  //console.log(data);
+        //  $rootScope.isStoreLoaded = true;
+        //
+        //  for(var i=0;i<data.length;i++) {
+        //    var obj = data[i];
+        //
+        //    $scope.storeslistDealer.push(obj);
+        //  }
+        //}).error(function(data) {
+        //  //console.log(data);
+        //  $rootScope.isStoreLoaded = false;
+        //})
+
+        //$charge.settingsapp().getDuobaseFieldDetailsByTableNameAndFieldName("CTS_InventoryAttributes","Store").success(function(data)
+        //{
+        //  //console.log(data);
+        //  $rootScope.isStoreLoaded = true;
+        //
+        //  for(var i=0;i<data.length;i++) {
+        //    var obj = data[i];
+        //
+        //    $scope.storeslist.push({
+        //      storename: obj.RecordFieldData,
+        //      storeId: obj.RowID
+        //    });
+        //  }
+        //}).error(function(data) {
+        //  //console.log(data);
+        //  $rootScope.isStoreLoaded = false;
+        //})
 
 		$charge.settingsapp().getDuobaseValuesByTableName("CTS_CompanyAttributes").success(function(data) {
             $scope.CompanyProfile=data;
@@ -2123,6 +2168,22 @@
 
         $scope.changeType = function (val) {
             $scope.inventory_type = val;
+
+            $scope.customer_supplier.supplier="";
+            $scope.customer_supplier.customer="";
+            vm.searchText1=null;
+            vm.searchText2=null;
+            $scope.storeslistSelectedUser = [];
+
+            //if($scope.inventory_type == 'Receipt'){
+            //  $scope.storeslist = [];
+            //  $scope.storeslist = $scope.storeslistCompany;
+            //}
+            //else{
+            //  $scope.storeslist = [];
+            //  $scope.storeslist = $scope.storeslistDealer;
+            //}
+
         };
 
         $scope.clearform = function (state){
@@ -2870,10 +2931,10 @@
 
         }
 
-        $scope.promptInput = "";
-        $scope.promptInputSetup = function(form, updateMethod){
+        vm.promptInput = "";
+        $scope.promptInputSetup = vm.promptInputSetup = function(form, updateMethod){
             if(form.$valid){
-                updateMethod($scope.promptInput);
+                updateMethod(vm.promptInput);
             }else{
                 angular.element(document.querySelector('#promptForm')).find('.ng-invalid:visible:first').focus();
             }
@@ -2881,39 +2942,84 @@
 
         $scope.addStore = function(ev,store)
         {
-            //
-            $scope.store_details.receivedStore = "";
-            //$scope.content.newBrandVal= "";
-            $scope.newStore=true;
-            //$scope.requireBrand=true;
+            var userSelected = false;
+            vm.selectedUser = "";
+            if($scope.inventory_type == 'Receipt')
+            {
+              if($scope.customer_supplier.supplier!="" && $scope.customer_supplier.supplier!=null && $scope.customer_supplier.supplier!=undefined)
+              {
+                userSelected = true;
+                vm.selectedUser = angular.copy($scope.customer_supplier.supplier);
+              }
+              else
+              {
+                userSelected = false;
+              }
+            }
+            else if($scope.inventory_type == 'Issue')
+            {
+              if($scope.customer_supplier.customer!="" && $scope.customer_supplier.customer!=null && $scope.customer_supplier.customer!=undefined)
+              {
+                userSelected = true;
+                vm.selectedUser = angular.copy($scope.customer_supplier.customer);
+              }
+              else
+              {
+                userSelected = false;
+              }
+            }
 
-            //var confirm = $mdDialog.prompt()
-            //  .title('Enter Store Name')
-            //  .placeholder('Store Name')
-            //  .ariaLabel('Store Name')
-            //  .targetEvent(ev)
-            //  .ok('Add')
-            //  .cancel('Cancel');
+            if(userSelected)
+            {
+              //
+              $scope.store_details.receivedStore = "";
+              //$scope.content.newBrandVal= "";
+              $scope.newStore=true;
+              //$scope.requireBrand=true;
 
-            $mdDialog.show({
-                controller: InventoryController,
+              //var confirm = $mdDialog.prompt()
+              //  .title('Enter Store Name')
+              //  .placeholder('Store Name')
+              //  .ariaLabel('Store Name')
+              //  .targetEvent(ev)
+              //  .ok('Add')
+              //  .cancel('Cancel');
+
+              $mdDialog.show({
+                controller: 'AddNewInventoryStoreController',
                 templateUrl: 'app/main/inventory/dialogs/prompt-dialog-store.html',
+                controllerAs: 'vm',
                 parent: angular.element($document.body),
                 targetEvent: ev,
+                locals:{
+                  selectedMail: undefined,
+                  selectedUser: vm.selectedUser,
+                  type: $scope.inventory_type,
+                  StoreList: $scope.storeslist
+                },
                 clickOutsideToClose:false
-            })
-                .then(function(result, rowid) {
-                    $scope.storeslist.push({
-                        storename:result,
-                        storeId:rowid
-                    });
-                    $scope.store_details.receivedStore = {
-                      storename:result,
-                      storeId:rowid
-                    };
+              })
+                .then(function(result) {
+                  if(result!="" && result!=undefined)
+                  {
+                    $scope.storeslistSelectedUser.push(result);
+                    $scope.storeslist.push(result);
+                    if($scope.inventory_type == 'Receipt'){
+                      $scope.store_details.receivedStore = result;
+                    }
+                    else{
+                      $scope.store_details.issuedStore = result;
+                    }
+                  }
+                  $scope.newStore = false;
                 }, function() {
-                    $scope.newStore=false;
+                  $scope.newStore=false;
                 });
+            }
+            else
+            {
+              notifications.toast("Please select user to add Stores!", "error");
+            }
 
 
             //$mdDialog.show(confirm).then(function(result) {
@@ -2933,179 +3039,236 @@
             //storename:"asdasdsdss"
         }
 
-        $scope.closeDialog = function () {
-            $scope.prompInput = "";
+        $scope.closeDialog = vm.closeDialog = function () {
+            vm.promptInput = "";
             $scope.newStore=false;
             $mdDialog.hide();
         }
 
-        $scope.isAddStoreClicked = false;
+        $scope.filterCompanyDealerStores = function(user){
+          $scope.storeslistSelectedUser = [];
+          for (var i = 0; i < $scope.storeslist.length; i++) {
+            if ($scope.storeslist[i].guProfileID == user.profileId) {
+              $scope.storeslistSelectedUser.push($scope.storeslist[i]);
+            }
+          }
+        }
+
+        vm.isAddStoreClicked = false;
         $scope.saveNewStore = function(storeval)
         {
             if(storeval!=undefined) {
-                $scope.isAddStoreClicked = true;
+              vm.isAddStoreClicked = true;
                 var isDuplicateStore = false;
-                if ($scope.storeslist.length != 0) {
-                    for (var i = 0; i < $scope.storeslist.length; i++) {
-                        if ($scope.storeslist[i].storename == storeval) {
-                            isDuplicateStore = true;
-                            $scope.isAddStoreClicked = false;
-                            notifications.toast("Store already exists", "error");
-                            break;
-                        }
-                    }
-                    if (!isDuplicateStore) {
-                        if ($rootScope.isStoreLoaded) {
-                            var req = {
-                                "RecordName": "CTS_InventoryAttributes",
-                                "FieldName": "Store",
-                                "RecordFieldData": storeval
-                            };
 
-                            $charge.settingsapp().insertDuoBaseValuesAddition(req).success(function (data) {
-                                //console.log(data);
-                                if (data.error == "00000") {
-                                    //$scope.storeslist.push({
-                                    //    storename:storeval,
-                                    //    storeId:data.RowID
-                                    //});
-                                    $scope.newStore = false;
-                                    notifications.toast("Store inserted!" , "success");
-                                    $scope.isAddStoreClicked = false;
-                                    $mdDialog.hide(storeval, data.RowID);
-                                }
-                            }).error(function (data) {
-                                //console.log(data);
-                                $scope.newStore = false;
-                                $scope.isAddStoreClicked = false;
-                                $mdDialog.hide();
-                            })
-                        }
-                        else {
-                            var req = {
-                                "GURecID": "123",
-                                "RecordType": "CTS_InventoryAttributes",
-                                "OperationalStatus": "Active",
-                                "RecordStatus": "Active",
-                                "Cache": "CTS_InventoryAttributes",
-                                "Separate": "Test",
-                                "RecordName": "CTS_InventoryAttributes",
-                                "GuTranID": "12345",
-                                "RecordCultureName": "CTS_InventoryAttributes",
-                                "RecordCode": "CTS_InventoryAttributes",
-                                "commonDatafieldDetails": [
-                                    {
-                                        "FieldCultureName": "Store",
-                                        "FieldID": "124",
-                                        "FieldName": "Store",
-                                        "FieldType": "StoreType",
-                                        "ColumnIndex": "0"
-                                    },
-                                    {
-                                        "FieldCultureName": "DefaultStockLevel",
-                                        "FieldID": "124",
-                                        "FieldName": "DefaultStockLevel",
-                                        "FieldType": "DefaultStockLevelType",
-                                        "ColumnIndex": "1"
-                                    }
-                                ],
-                                "commonDataValueDetails": [
-                                    {
-                                        "RowID": "1452",
-                                        "RecordFieldData": storeval,
-                                        "ColumnIndex": "0"
-                                    },
-                                    {
-                                        "RowID": "1452",
-                                        "RecordFieldData": "",
-                                        "ColumnIndex": "1"
-                                    }
-                                ]
-                            }
+              for (var i = 0; i < $scope.storeslist.length; i++) {
+                if ($scope.storeslist[i].storename == storeval) {
+                  isDuplicateStore = true;
+                  vm.isAddStoreClicked = false;
+                  notifications.toast("Store already exists", "error");
+                  break;
+                }
+              }
+              if (!isDuplicateStore) {
 
-                            $charge.settingsapp().store(req).success(function (data) {
-                                $rootScope.isStoreLoaded = true;
-                                if (data[0].error == "00000") {
-                                    //$scope.storeslist.push({
-                                    //    storename:storeval,
-                                    //    storeId:data.RowID
-                                    //});
-                                    $scope.newStore = false;
-                                    notifications.toast("Store inserted!" , "success");
-                                    $scope.isAddStoreClicked = false;
-                                    $mdDialog.hide(storeval, data.RowID);
-                                }
-                            }).error(function (data) {
-                                //console.log(data);
-                                $scope.newStore = false;
-                                $scope.isAddStoreClicked = false;
-                                $mdDialog.hide();
-                            })
-                        }
-                    }
+                var profileId="";
+                var profileName="";
+                var type="";
+                if($scope.inventory_type == 'Receipt')
+                {
+                  profileId = vm.selectedUser.profileId;
+                  profileName = vm.selectedUser.profilename;
+                  type = "Company";
+                }
+                else if($scope.inventory_type == 'Issue')
+                {
+                  profileId = vm.selectedUser.profileId;
+                  profileName = vm.selectedUser.profilename;
+                  type = "Dealer";
                 }
 
-                else {
-                    var req = {
-                        "GURecID": "123",
-                        "RecordType": "CTS_InventoryAttributes",
-                        "OperationalStatus": "Active",
-                        "RecordStatus": "Active",
-                        "Cache": "CTS_InventoryAttributes",
-                        "Separate": "Test",
-                        "RecordName": "CTS_InventoryAttributes",
-                        "GuTranID": "12345",
-                        "RecordCultureName": "CTS_InventoryAttributes",
-                        "RecordCode": "CTS_InventoryAttributes",
-                        "commonDatafieldDetails": [
-                            {
-                                "FieldCultureName": "Store",
-                                "FieldID": "124",
-                                "FieldName": "Store",
-                                "FieldType": "StoreType",
-                                "ColumnIndex": "0"
-                            },
-                            {
-                                "FieldCultureName": "DefaultStockLevel",
-                                "FieldID": "124",
-                                "FieldName": "DefaultStockLevel",
-                                "FieldType": "DefaultStockLevelType",
-                                "ColumnIndex": "1"
-                            }
-                        ],
-                        "commonDataValueDetails": [
-                            {
-                                "RowID": "1452",
-                                "RecordFieldData": storeval,
-                                "ColumnIndex": "0"
-                            },
-                            {
-                                "RowID": "1452",
-                                "RecordFieldData": "",
-                                "ColumnIndex": "1"
-                            }
-                        ]
-                    }
+                var req = {
+                  "guProfileID" : profileId,
+                  "profileName":profileName,
+                  "store":storeval,
+                  "type" : type
+                };
 
-                    $charge.settingsapp().store(req).success(function (data) {
-                        $rootScope.isStoreLoaded = true;
-                        if (data[0].error == "00000") {
-                            //$scope.storeslist.push({
-                            //    storename:storeval,
-                            //    storeId:data.FieldID
-                            //});
-                            $scope.newStore = false;
-                            notifications.toast("Store inserted!" , "success");
-                            $scope.isAddStoreClicked = false;
-                            $mdDialog.hide(storeval, data.RowID);
-                        }
-                    }).error(function (data) {
-                        //console.log(data);
-                        $scope.newStore = false;
-                        $scope.isAddStoreClicked = false;
-                        $mdDialog.hide();
-                    })
-                }
+                $charge.stock().addNewStore(req).success(function (data) {
+                  //console.log(data);
+                  if (data.error == "00000") {
+                    $scope.newStore = false;
+                    notifications.toast("Store inserted!" , "success");
+                    $scope.isAddStoreClicked = false;
+                    var storeObj = {
+                      createdDate:new Date(),
+                      createdUser:"abc",
+                      guProfileID:profileId,
+                      guStoreID:data.data.id,
+                      profileName:profileName,
+                      store:storeval,
+                      type:type
+                    };
+                    $mdDialog.hide(storeObj);
+                  }
+                }).error(function (data) {
+                  //console.log(data);
+                  $scope.newStore = false;
+                  $scope.isAddStoreClicked = false;
+                  $mdDialog.hide("");
+                })
+              }
+
+                //if ($scope.storeslist.length != 0) {
+                //  //if ($rootScope.isStoreLoaded) {
+                //  //    var req = {
+                //  //        "RecordName": "CTS_InventoryAttributes",
+                //  //        "FieldName": "Store",
+                //  //        "RecordFieldData": storeval
+                //  //    };
+                //  //
+                //  //    $charge.settingsapp().insertDuoBaseValuesAddition(req).success(function (data) {
+                //  //        //console.log(data);
+                //  //        if (data.error == "00000") {
+                //  //            //$scope.storeslist.push({
+                //  //            //    storename:storeval,
+                //  //            //    storeId:data.RowID
+                //  //            //});
+                //  //            $scope.newStore = false;
+                //  //            notifications.toast("Store inserted!" , "success");
+                //  //            $scope.isAddStoreClicked = false;
+                //  //            $mdDialog.hide(storeval, data.RowID);
+                //  //        }
+                //  //    }).error(function (data) {
+                //  //        //console.log(data);
+                //  //        $scope.newStore = false;
+                //  //        $scope.isAddStoreClicked = false;
+                //  //        $mdDialog.hide();
+                //  //    })
+                //  //}
+                //  //else {
+                //  //    var req = {
+                //  //        "GURecID": "123",
+                //  //        "RecordType": "CTS_InventoryAttributes",
+                //  //        "OperationalStatus": "Active",
+                //  //        "RecordStatus": "Active",
+                //  //        "Cache": "CTS_InventoryAttributes",
+                //  //        "Separate": "Test",
+                //  //        "RecordName": "CTS_InventoryAttributes",
+                //  //        "GuTranID": "12345",
+                //  //        "RecordCultureName": "CTS_InventoryAttributes",
+                //  //        "RecordCode": "CTS_InventoryAttributes",
+                //  //        "commonDatafieldDetails": [
+                //  //            {
+                //  //                "FieldCultureName": "Store",
+                //  //                "FieldID": "124",
+                //  //                "FieldName": "Store",
+                //  //                "FieldType": "StoreType",
+                //  //                "ColumnIndex": "0"
+                //  //            },
+                //  //            {
+                //  //                "FieldCultureName": "DefaultStockLevel",
+                //  //                "FieldID": "124",
+                //  //                "FieldName": "DefaultStockLevel",
+                //  //                "FieldType": "DefaultStockLevelType",
+                //  //                "ColumnIndex": "1"
+                //  //            }
+                //  //        ],
+                //  //        "commonDataValueDetails": [
+                //  //            {
+                //  //                "RowID": "1452",
+                //  //                "RecordFieldData": storeval,
+                //  //                "ColumnIndex": "0"
+                //  //            },
+                //  //            {
+                //  //                "RowID": "1452",
+                //  //                "RecordFieldData": "",
+                //  //                "ColumnIndex": "1"
+                //  //            }
+                //  //        ]
+                //  //    }
+                //  //
+                //  //    $charge.settingsapp().store(req).success(function (data) {
+                //  //        $rootScope.isStoreLoaded = true;
+                //  //        if (data[0].error == "00000") {
+                //  //            //$scope.storeslist.push({
+                //  //            //    storename:storeval,
+                //  //            //    storeId:data.RowID
+                //  //            //});
+                //  //            $scope.newStore = false;
+                //  //            notifications.toast("Store inserted!" , "success");
+                //  //            $scope.isAddStoreClicked = false;
+                //  //            $mdDialog.hide(storeval, data.RowID);
+                //  //        }
+                //  //    }).error(function (data) {
+                //  //        //console.log(data);
+                //  //        $scope.newStore = false;
+                //  //        $scope.isAddStoreClicked = false;
+                //  //        $mdDialog.hide();
+                //  //    })
+                //  //}
+                //}
+                //else {
+                //    var req = {
+                //        "GURecID": "123",
+                //        "RecordType": "CTS_InventoryAttributes",
+                //        "OperationalStatus": "Active",
+                //        "RecordStatus": "Active",
+                //        "Cache": "CTS_InventoryAttributes",
+                //        "Separate": "Test",
+                //        "RecordName": "CTS_InventoryAttributes",
+                //        "GuTranID": "12345",
+                //        "RecordCultureName": "CTS_InventoryAttributes",
+                //        "RecordCode": "CTS_InventoryAttributes",
+                //        "commonDatafieldDetails": [
+                //            {
+                //                "FieldCultureName": "Store",
+                //                "FieldID": "124",
+                //                "FieldName": "Store",
+                //                "FieldType": "StoreType",
+                //                "ColumnIndex": "0"
+                //            },
+                //            {
+                //                "FieldCultureName": "DefaultStockLevel",
+                //                "FieldID": "124",
+                //                "FieldName": "DefaultStockLevel",
+                //                "FieldType": "DefaultStockLevelType",
+                //                "ColumnIndex": "1"
+                //            }
+                //        ],
+                //        "commonDataValueDetails": [
+                //            {
+                //                "RowID": "1452",
+                //                "RecordFieldData": storeval,
+                //                "ColumnIndex": "0"
+                //            },
+                //            {
+                //                "RowID": "1452",
+                //                "RecordFieldData": "",
+                //                "ColumnIndex": "1"
+                //            }
+                //        ]
+                //    }
+                //
+                //    $charge.settingsapp().store(req).success(function (data) {
+                //        $rootScope.isStoreLoaded = true;
+                //        if (data[0].error == "00000") {
+                //            //$scope.storeslist.push({
+                //            //    storename:storeval,
+                //            //    storeId:data.FieldID
+                //            //});
+                //            $scope.newStore = false;
+                //            notifications.toast("Store inserted!" , "success");
+                //            $scope.isAddStoreClicked = false;
+                //            $mdDialog.hide(storeval, data.RowID);
+                //        }
+                //    }).error(function (data) {
+                //        //console.log(data);
+                //        $scope.newStore = false;
+                //        $scope.isAddStoreClicked = false;
+                //        $mdDialog.hide();
+                //    })
+                //}
             }
             else
             {

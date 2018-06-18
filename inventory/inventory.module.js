@@ -1,9 +1,9 @@
 ////////////////////////////////
 // App : Inventory
 // Owner  : Gihan Herath
-// Last changed date : 2018/06/06
-// Version : 6.1.0.6
-// Modified By : Kasun
+// Last changed date : 2018/06/18
+// Version : 6.1.0.7
+// Modified By : Gihan
 /////////////////////////////////
 
 (function ()
