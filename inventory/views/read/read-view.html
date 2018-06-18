@@ -207,6 +207,7 @@
                                      md-input-name="autocompleteField1"
                                      md-no-cache="vm.noCache"
                                      md-selected-item="customer_supplier.supplier"
+                                     md-selected-item-change="filterCompanyDealerStores(customer_supplier.supplier)"
                                      md-search-text="vm.searchText1"
                                      md-items="item in vm.querySearch(vm.searchText1,'Supplier')"
                                      md-search-text-change="loadProfileByKeywordSupp(vm.searchText1,'Supplier')"
@@ -232,7 +233,7 @@
                     <md-input-container flex>
                         <label>Received store</label>
                         <md-select ng-required="true" name="receivedStore" ng-model="store_details.receivedStore" required>
-                            <md-option ng-repeat="store in storeslist" ng-value="store">{{store.storename}}</md-option>
+                            <md-option ng-repeat="store in storeslistSelectedUser" ng-value="store">{{store.store}}</md-option>
                             <!--<md-option value="defaultStore">Default store</md-option>-->
                         </md-select>
                     </md-input-container>
@@ -423,6 +424,7 @@
                                      md-input-name="autocompleteField2"
                                      md-no-cache="vm.noCache"
                                      md-selected-item="customer_supplier.customer"
+                                     md-selected-item-change="filterCompanyDealerStores(customer_supplier.customer)"
                                      md-search-text="vm.searchText2"
                                      md-items="item in vm.querySearch(vm.searchText2,'Dealer')"
                                      md-search-text-change="loadProfileByKeywordDeal(vm.searchText2,'Dealer')"
@@ -448,7 +450,7 @@
                     <md-input-container flex>
                         <label>Issued Store</label>
                         <md-select ng-required="true" name="issuedStore" ng-model="store_details.issuedStore" required>
-                            <md-option ng-repeat="store in storeslist" ng-value="store">{{store.storename}}</md-option>
+                            <md-option ng-repeat="store in storeslistSelectedUser" ng-value="store">{{store.store}}</md-option>
                             <!--<md-option ng-value="defaultStore">Default Store</md-option>-->
                         </md-select>
                     </md-input-container>
