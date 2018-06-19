@@ -2308,8 +2308,8 @@
 
                     $scope.content.supplier=selecteduser.profilename;
                     $scope.content.supplierID=selecteduser.profileId;
-                    $scope.content.receivedStore=selectedstore.storename;
-                    $scope.content.receivedStoreID=selectedstore.storeId;
+                    $scope.content.receivedStore=selectedstore.store;
+                    $scope.content.receivedStoreID=selectedstore.guStoreID;
                     //$scope.content.receivedStore=selectedstore;
                     //$scope.content.receivedStoreID="Default001";
                     $scope.content.receivedDate=moment($scope.content.receivedDate).format('YYYY-MM-DD HH:MM:SS');
@@ -2452,8 +2452,8 @@
 
                     $scope.aodcontent.customer=selecteduser.profilename;
                     $scope.aodcontent.guCustomerID=selecteduser.profileId;
-                    $scope.aodcontent.issuedStore=selectedstore.storename;
-                    $scope.aodcontent.issuedStoreID=selectedstore.storeId;
+                    $scope.aodcontent.issuedStore=selectedstore.store;
+                    $scope.aodcontent.issuedStoreID=selectedstore.guStoreID;
                     $scope.aodcontent.createdUser="admin";
                     $scope.aodcontent.createdDate=currentdate;
                     $scope.aodcontent.guTranID="11";
@@ -3047,9 +3047,12 @@
 
         $scope.filterCompanyDealerStores = function(user){
           $scope.storeslistSelectedUser = [];
-          for (var i = 0; i < $scope.storeslist.length; i++) {
-            if ($scope.storeslist[i].guProfileID == user.profileId) {
-              $scope.storeslistSelectedUser.push($scope.storeslist[i]);
+          if(user!="" && user!=undefined)
+          {
+            for (var i = 0; i < $scope.storeslist.length; i++) {
+              if ($scope.storeslist[i].guProfileID == user.profileId) {
+                $scope.storeslistSelectedUser.push($scope.storeslist[i]);
+              }
             }
           }
         }
